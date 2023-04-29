@@ -10,6 +10,8 @@ import apiService from "../app/apiService";
 import orderBy from "lodash/orderBy";
 import LoadingScreen from "../components/LoadingScreen";
 
+const api_key = "096661a0ca80af081193ef63f856a4cf";
+
 function HomePage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +36,7 @@ function HomePage() {
     const getProducts = async () => {
       setLoading(true);
       try {
-        const res = await apiService.get("/products");
+        const res = await apiService.get(`${api_key}`);
         setProducts(res.data);
         setError("");
       } catch (error) {
