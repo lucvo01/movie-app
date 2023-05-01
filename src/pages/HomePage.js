@@ -22,9 +22,9 @@ function HomePage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   
-// const totalPages = Math.ceil(movies.length/15);
-  const startIndex = (page - 1) * 10;
-  const endIndex = startIndex + 10;
+// const totalPages = Math.ceil(movies.length/12);
+  const startIndex = (page - 1) * 12;
+  const endIndex = startIndex + 12;
  
 
  
@@ -38,8 +38,8 @@ function HomePage() {
         );
         setMovies(response.data.items);
         setError("");
-        setTotalPages(Math.ceil(response.data.items.length/15))
-        console.log(response.data.items.slice(0, 10));
+        setTotalPages(Math.ceil(response.data.items.length/12))
+        console.log(response.data.items.slice(0, 12));
         console.log(startIndex);
         console.log(endIndex);
         console.log(totalPages);
@@ -51,7 +51,7 @@ function HomePage() {
       setLoading(false);
     };
     fetch();
-  }, [page]);
+  }, []);
 
   return (
     <Container>
