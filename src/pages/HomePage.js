@@ -8,7 +8,7 @@ import LoadingScreen from "../components/LoadingScreen";
 import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 // import GenreList from "../components/GenreList";
-import MovieFilter from '../components/MovieFilter';
+import MovieFilter from "../components/MovieFilter";
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
 const movieListURL = "/list/28";
@@ -21,8 +21,10 @@ function HomePage() {
   const [error, setError] = useState("");
 
   const defaultValues = {};
-  const methods = useForm({ defaultValues });
+  const methods = useForm();
   const { watch, reset } = methods;
+  const filters = watch();
+  const filteredMovies = applyFilter(movies, filters);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
@@ -58,7 +60,7 @@ function HomePage() {
   }, []);
 
   return (
-    <Container>
+    <Container sx={{ display: "flex" }}>
       <Stack>
         {/* <GenreList genres={genres} /> */}
         <FormProvider methods={methods}>
@@ -108,3 +110,13 @@ function HomePage() {
 }
 
 export default HomePage;
+
+function applyFilter(movies, filters) {
+  let filteredMovies = movies;
+  if(filters.genre.length > 0){
+    filteredMovies = movies.filter((movie) =>
+      filters.genre.includes(movie.genre_ids)
+    );
+  }
+  return filteredMovies;
+}
