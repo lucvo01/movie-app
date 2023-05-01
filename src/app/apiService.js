@@ -2,7 +2,10 @@ import axios from "axios";
 import { BASE_URL } from "./config";
 
 const apiService = axios.create({
-  baseURL: BASE_URL
+  baseURL: BASE_URL,
+  headers: {
+    Authorization: "096661a0ca80af081193ef63f856a4cf"
+  }
 });
 
 apiService.interceptors.request.use(

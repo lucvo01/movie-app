@@ -22,7 +22,7 @@ function HomePage() {
       setLoading(true);
       try {
         const response = await apiService.get(
-          "/list/651?api_key=096661a0ca80af081193ef63f856a4cf"
+          "/list/28?api_key=096661a0ca80af081193ef63f856a4cf"
         );
         setMovies(response.data.items);
         setError("");

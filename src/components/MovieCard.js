@@ -1,14 +1,17 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, Stack } from "@mui/material";
-// import { useNavigate } from "react-router-dom";
-import { fCurrency } from "../utils";
+import { useNavigate } from "react-router-dom";
+// import { fCurrency } from "../utils";
+import apiService from "../app/apiService";
+import { BASE_URL } from "../app/config";
 
 function MovieCard({ movie }) {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
   return (
     <Card>
       <CardActionArea>
@@ -17,9 +20,10 @@ function MovieCard({ movie }) {
           height="200"
           image={`https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US/${movie.backdrop_path}`}
           onClick={() =>
-            console.log(
-              `https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US/${movie.backdrop_path}`
-            )
+            // console.log(
+            //   `https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US/${movie.backdrop_path}`
+            // )
+            navigate(`/move/${movie.id}`)
           }
           alt="green iguana"
         />
