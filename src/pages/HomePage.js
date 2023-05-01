@@ -1,17 +1,16 @@
-import React, {  useState, useEffect } from "react";
-// import useAuth from "../hooks/useAuth";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-// import axios from "axios";
 import apiService from "../app/apiService";
 import { Alert, Box, Container, Stack } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
-import Typography from '@mui/material/Typography';
-import Pagination  from '@mui/material/Pagination';
-import GenreList from '../components/GenreList';
+import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
+// import GenreList from "../components/GenreList";
+import MovieFilter from '../components/MovieFilter';
 
-const apiKey = '096661a0ca80af081193ef63f856a4cf';
+const apiKey = "096661a0ca80af081193ef63f856a4cf";
 const movieListURL = "/list/28";
 const genresURL = "/genre/movie/list";
 
@@ -27,13 +26,11 @@ function HomePage() {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
-  
+
   const startIndex = (page - 1) * 12;
   const endIndex = startIndex + 12;
- 
 
   useEffect(() => {
-    
     const fetch = async () => {
       setLoading(true);
       try {
@@ -44,12 +41,12 @@ function HomePage() {
           `${genresURL}?api_key=${apiKey}`
         );
 
-        setGenres(resGenres.data.genres)
+        setGenres(resGenres.data.genres);
         console.log("Genres", resGenres.data.genres);
-        
+
         setMovies(response.data.items);
         setError("");
-        setTotalPages(Math.ceil(response.data.items.length/12))
+        setTotalPages(Math.ceil(response.data.items.length / 12));
         console.log(response.data.items.slice(0, 12));
       } catch (error) {
         console.log(error);
@@ -63,24 +60,23 @@ function HomePage() {
   return (
     <Container>
       <Stack>
+        {/* <GenreList genres={genres} /> */}
         <FormProvider methods={methods}>
-          {/* <ProductFilter resetFilter={reset} /> */}
+          <MovieFilter genres={genres} />
         </FormProvider>
-        
       </Stack>
       <Stack sx={{ flexGrow: 1 }}>
-        <FormProvider methods={methods}>
+        {/* <FormProvider methods={methods}>
           <Stack
             spacing={2}
             direction={{ xs: "column", sm: "row" }}
             alignItems={{ sm: "center" }}
             justifyContent="space-between"
-            mb={2}
-          >
-            {/* <ProductSearch />
-            <ProductSort /> */}
+            mb={2}>
+            <ProductSearch />
+            <ProductSort />
           </Stack>
-        </FormProvider>
+        </FormProvider> */}
         <Box sx={{ position: "relative", height: 1 }}>
           {loading ? (
             <LoadingScreen />
@@ -89,20 +85,23 @@ function HomePage() {
               {error ? (
                 <Alert severity="error">{error}</Alert>
               ) : (
-                
-                <MovieList movies={movies.slice(startIndex, endIndex)} />
-            
+                <>
+                  <MovieList movies={movies.slice(startIndex, endIndex)} />
+                </>
               )}
             </>
           )}
         </Box>
         <Stack spacing={2}>
-          <GenreList genres={genres}/>
-      <Typography>Page: {page}</Typography>
-      <Pagination count={totalPages} page={page}  onChange={(event, value) => {
-            setPage(value);
-          }} />
-    </Stack>
+          <Typography>Page: {page}</Typography>
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(event, value) => {
+              setPage(value);
+            }}
+          />
+        </Stack>
       </Stack>
     </Container>
   );
