@@ -113,10 +113,10 @@ export default HomePage;
 
 function applyFilter(movies, filters) {
   let filteredMovies = movies;
-  if(filters.genre.length > 0){
-    filteredMovies = movies.filter((movie) =>
-      filters.genre.includes(movie.genre_ids)
-    );
-  }
+  // if(filters.genre.length > 0){
+  //   filteredMovies = movies.filter((movie) =>
+  //     filters.genre.includes(movie.genre_ids)
+  //   );
+  // }
   return filteredMovies;
 }
