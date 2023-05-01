@@ -4,23 +4,28 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, Stack } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { fCurrency } from "../utils";
 
-function ProductCard({ product }) {
-  const navigate = useNavigate();
+function MovieCard({ movie }) {
+  // const navigate = useNavigate();
   return (
-    <Card onClick={() => navigate(`/product/${product.id}`)}>
+    <Card>
       <CardActionArea>
         <CardMedia
           component="img"
           height="200"
-          image={product.cover}
+          image={`https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US/${movie.backdrop_path}`}
+          onClick={() =>
+            console.log(
+              `https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US/${movie.backdrop_path}`
+            )
+          }
           alt="green iguana"
         />
         <CardContent>
           <Typography gutterBottom variant="body1" component="div" noWrap>
-            {product.name}
+            {movie.title}
           </Typography>
           <Stack
             direction="row"
@@ -28,17 +33,20 @@ function ProductCard({ product }) {
             alignItems="center"
             justifyContent="flex-end"
           >
-            {product.priceSale && (
+            <Typography component="span" sx={{}}>
+              Release Date: {movie.release_date}
+            </Typography>
+            {/* {movie.priceSale && (
               <Typography
                 component="span"
                 sx={{ color: "text.disabled", textDecoration: "line-through" }}
               >
-                {fCurrency(product.priceSale)}
+                {fCurrency(movie.budget)}
               </Typography>
-            )}
-            <Typography variant="subtitle1">
-              {fCurrency(product.price)}
-            </Typography>
+            )} */}
+            {/* <Typography variant="subtitle1">
+              {fCurrency(movie.price)}
+            </Typography> */}
           </Stack>
         </CardContent>
       </CardActionArea>
@@ -46,4 +54,4 @@ function ProductCard({ product }) {
   );
 }
 
-export default ProductCard;
+export default MovieCard;

@@ -8,10 +8,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 const LoginSchema = Yup.object().shape({
-  username: Yup.string().required("Username is required"),
+  username: Yup.string().required("Username is required")
 });
 const defaultValues = {
-  username: "",
+  username: ""
 };
 
 function LoginPage() {
@@ -21,7 +21,7 @@ function LoginPage() {
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
-    defaultValues,
+    defaultValues
   });
   const { handleSubmit } = methods;
 

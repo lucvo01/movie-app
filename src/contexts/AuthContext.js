@@ -3,7 +3,7 @@ import { createContext, useReducer, useEffect } from "react";
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
-  user: null,
+  user: null
 };
 
 const INITIALIZE = "INITIALIZE";
@@ -18,19 +18,19 @@ const reducer = (state, action) => {
         ...state,
         isAuthenticated,
         isInitialized: true,
-        user,
+        user
       };
     case LOGIN_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
+        user: action.payload.user
       };
     case LOGOUT:
       return {
         ...state,
         isAuthenticated: false,
-        user: null,
+        user: null
       };
     default:
       return state;
@@ -50,12 +50,12 @@ function AuthProvider({ children }) {
         if (username) {
           dispatch({
             type: INITIALIZE,
-            payload: { isAuthenticated: true, user: { username } },
+            payload: { isAuthenticated: true, user: { username } }
           });
         } else {
           dispatch({
             type: INITIALIZE,
-            payload: { isAuthenticated: false, user: null },
+            payload: { isAuthenticated: false, user: null }
           });
         }
       } catch (err) {
@@ -64,8 +64,8 @@ function AuthProvider({ children }) {
           type: INITIALIZE,
           payload: {
             isAuthenticated: false,
-            user: null,
-          },
+            user: null
+          }
         });
       }
     };
@@ -76,7 +76,7 @@ function AuthProvider({ children }) {
     window.localStorage.setItem("username", username);
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: { user: { username } },
+      payload: { user: { username } }
     });
     callback();
   };
@@ -92,7 +92,7 @@ function AuthProvider({ children }) {
       value={{
         ...state,
         login,
-        logout,
+        logout
       }}
     >
       {children}
