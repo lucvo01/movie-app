@@ -22,12 +22,10 @@ function HomePage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   
-// const totalPages = Math.ceil(movies.length/12);
   const startIndex = (page - 1) * 12;
   const endIndex = startIndex + 12;
  
 
- 
   useEffect(() => {
     const apiKey = '096661a0ca80af081193ef63f856a4cf';
     const fetch = async () => {
@@ -40,10 +38,6 @@ function HomePage() {
         setError("");
         setTotalPages(Math.ceil(response.data.items.length/12))
         console.log(response.data.items.slice(0, 12));
-        console.log(startIndex);
-        console.log(endIndex);
-        console.log(totalPages);
-        
       } catch (error) {
         console.log(error);
         setError(error.message);
