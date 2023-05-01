@@ -5,28 +5,40 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import ImageListItem from '@mui/material/ImageListItem';
+import { styled } from '@mui/material/styles';
 // import { fCurrency } from "../utils";
 import apiService from "../app/apiService";
 import { BASE_URL } from "../app/config";
+
+// Define the styles for the Card component
+const StyledCard = styled(Card)({
+  transition: 'transition 0.2s',
+  '&:hover': {
+    transform: 'scale(1.2)',
+    zIndex: 1,
+  },
+
+})
 
 function MovieCard({ movie }) {
   const navigate = useNavigate();
 
   return (
-    <Card>
+    <StyledCard>
       <CardActionArea>
         <CardMedia
           component="img"
           height="200"
-          image={`https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US/${movie.backdrop_path}`}
+          image={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
           onClick={() =>
             // console.log(
             //   `https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US/${movie.backdrop_path}`
             // )
-            navigate(`/move/${movie.id}`)
+            navigate(`/movie/${movie.id}`)
           }
           alt="green iguana"
-        />
+         />
         <CardContent>
           <Typography gutterBottom variant="body1" component="div" noWrap>
             {movie.title}
@@ -54,7 +66,7 @@ function MovieCard({ movie }) {
           </Stack>
         </CardContent>
       </CardActionArea>
-    </Card>
+    </StyledCard>
   );
 }
 

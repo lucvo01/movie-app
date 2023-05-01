@@ -7,7 +7,9 @@ import { Alert, Box, Container, Stack } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
-
+import Typography from '@mui/material/Typography';
+import Pagination  from '@mui/material/Pagination';
+// import FetchData from '../data/FetchData';
 function HomePage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,15 +19,31 @@ function HomePage() {
   const methods = useForm({ defaultValues });
   const { watch, reset } = methods;
 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  
+// const totalPages = Math.ceil(movies.length/15);
+  const startIndex = (page - 1) * 10;
+  const endIndex = startIndex + 10;
+ 
+
+ 
   useEffect(() => {
+    const apiKey = '096661a0ca80af081193ef63f856a4cf';
     const fetch = async () => {
       setLoading(true);
       try {
         const response = await apiService.get(
-          "/list/28?api_key=096661a0ca80af081193ef63f856a4cf"
+          `/list/28?api_key=${apiKey}`
         );
         setMovies(response.data.items);
         setError("");
+        setTotalPages(Math.ceil(response.data.items.length/15))
+        console.log(response.data.items.slice(0, 10));
+        console.log(startIndex);
+        console.log(endIndex);
+        console.log(totalPages);
+        
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -33,7 +51,7 @@ function HomePage() {
       setLoading(false);
     };
     fetch();
-  }, []);
+  }, [page]);
 
   return (
     <Container>
@@ -63,11 +81,17 @@ function HomePage() {
               {error ? (
                 <Alert severity="error">{error}</Alert>
               ) : (
-                <MovieList movies={movies} />
+                <MovieList movies={movies.slice(startIndex, endIndex)} />
               )}
             </>
           )}
         </Box>
+        <Stack spacing={2}>
+      <Typography>Page: {page}</Typography>
+      <Pagination count={totalPages} page={page}  onChange={(event, value) => {
+            setPage(value);
+          }} />
+    </Stack>
       </Stack>
     </Container>
   );

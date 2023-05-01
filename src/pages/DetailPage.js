@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import apiService from "../app/apiService";
+import MovieDetail from "../components/MovieDetail";
 
-function DetailPage({ movie }) {
+function DetailPage() {
   let params = useParams();
-  const [movies, setMovies] = useState([]);
+  const [movie, setMovie] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -13,10 +14,11 @@ function DetailPage({ movie }) {
       setLoading(true);
       try {
         const response = await apiService.get(
-          `/movie/${movie.id}?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US`
+          `/movie/${params.id}?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US`
         );
-        setMovies(response.data.items);
+        setMovie(response.data);
         setError("");
+        console.log("Movie Detail", response.data)
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -29,6 +31,7 @@ function DetailPage({ movie }) {
   return (
     <div>
       <h1>DetailPage - MovieId: {params.id}</h1>
+      <MovieDetail movie={movie}/>
     </div>
   );
 }
