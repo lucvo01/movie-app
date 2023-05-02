@@ -27,7 +27,7 @@ function HomePage() {
   const filteredMovies = applyFilter(movies, filters, genres);
 
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
+  const totalPages = Math.ceil(filteredMovies.length/12)
 
   const startIndex = (page - 1) * 12;
   const endIndex = startIndex + 12;
@@ -50,8 +50,6 @@ function HomePage() {
         console.log("Movies", response.data.items);
 
         setError("");
-        setTotalPages(Math.ceil(response.data.items.length / 12));
-        console.log(response.data.items.slice(0, 12));
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -68,7 +66,7 @@ function HomePage() {
           <MovieFilter genres={genres} resetFilter={reset}/>
         </FormProvider>
       </Stack>
-      <Stack sx={{ flexGrow: 1 }}>
+      <Stack sx={{ flexGrow: 1 }} >
         {/* <FormProvider methods={methods}>
           <Stack
             spacing={2}
@@ -89,14 +87,13 @@ function HomePage() {
                 <Alert severity="error">{error}</Alert>
               ) : (
                 <>
-                  <MovieList movies={filteredMovies} />
+                  <MovieList movies={filteredMovies.slice(startIndex, endIndex)} />
                 </>
               )}
             </>
           )}
         </Box>
-        <Stack spacing={2}>
-          <Typography>Page: {page}</Typography>
+        <Stack spacing={2} sx={{ alignItems:"center" }}>
           <Pagination
             count={totalPages}
             page={page}
@@ -115,8 +112,8 @@ export default HomePage;
 function applyFilter(movies, filters, genres) {
   let filteredMovies = movies;
 
-    if (filters.genre) {
-    const genreId = genres.find((item) => item.name === filters.genre).id;
+    if (filters.genreName) {
+    const genreId = genres.find((genre) => genre.name === filters.genreName).id;
     filteredMovies = movies.filter((movie) => movie.genre_ids.includes(genreId));
   }
 
