@@ -9,14 +9,18 @@ import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 // import GenreList from "../components/GenreList";
 import MovieFilter from "../components/MovieFilter";
+import MovieSearch from "../components/MovieSearch";
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
 const movieListURL = "/list/28";
 const genresURL = "/genre/movie/list";
+const searchURL = "/search/multi";
+const searchQuery = 'The%20Super%20Mario%20Bros';
 
 function HomePage() {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('The Super Mario Bros');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -42,12 +46,20 @@ function HomePage() {
         const resGenres = await apiService.get(
           `${genresURL}?api_key=${apiKey}`
         );
+        const resSearch = await apiService.get(
+          `${searchURL}?api_key=${apiKey}&query=${searchQuery}`
+        );
 
         setGenres(resGenres.data.genres);
         console.log("Genres", resGenres.data.genres);
 
         setMovies(response.data.items);
         console.log("Movies", response.data.items);
+
+        setSearchQuery(resSearch)
+         console.log("Search", resSearch.data);
+         console.log("Search", `${searchURL}?api_key=${apiKey}&query=${searchQuery}`);
+      
 
         setError("");
       } catch (error) {
@@ -67,17 +79,9 @@ function HomePage() {
         </FormProvider>
       </Stack>
       <Stack sx={{ flexGrow: 1 }} >
-        {/* <FormProvider methods={methods}>
-          <Stack
-            spacing={2}
-            direction={{ xs: "column", sm: "row" }}
-            alignItems={{ sm: "center" }}
-            justifyContent="space-between"
-            mb={2}>
-            <ProductSearch />
-            <ProductSort />
-          </Stack>
-        </FormProvider> */}
+       <FormProvider methods={methods}>
+        <MovieSearch/>
+       </FormProvider>
         <Box sx={{ position: "relative", height: 1 }}>
           {loading ? (
             <LoadingScreen />
@@ -115,6 +119,10 @@ function applyFilter(movies, filters, genres) {
     if (filters.genreName) {
     const genreId = genres.find((genre) => genre.name === filters.genreName).id;
     filteredMovies = movies.filter((movie) => movie.genre_ids.includes(genreId));
+  }
+
+  if(filters.searchQuery){
+    
   }
 
   return filteredMovies;
