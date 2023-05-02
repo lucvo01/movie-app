@@ -3,7 +3,7 @@ import {
   Radio,
   RadioGroup,
   FormHelperText,
-  FormControlLabel,
+  FormControlLabel
 } from "@mui/material";
 
 function FRadioGroup({ name, options, getOptionLabel, ...other }) {

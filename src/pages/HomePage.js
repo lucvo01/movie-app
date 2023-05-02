@@ -24,7 +24,7 @@ function HomePage() {
   const methods = useForm();
   const { watch, reset } = methods;
   const filters = watch();
-  const filteredMovies = applyFilter(movies, filters);
+  const filteredMovies = applyFilter(movies, filters, genres);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
@@ -47,6 +47,8 @@ function HomePage() {
         console.log("Genres", resGenres.data.genres);
 
         setMovies(response.data.items);
+        console.log("Movies", response.data.items);
+
         setError("");
         setTotalPages(Math.ceil(response.data.items.length / 12));
         console.log(response.data.items.slice(0, 12));
@@ -62,9 +64,8 @@ function HomePage() {
   return (
     <Container sx={{ display: "flex" }}>
       <Stack>
-        {/* <GenreList genres={genres} /> */}
         <FormProvider methods={methods}>
-          <MovieFilter genres={genres} />
+          <MovieFilter genres={genres} resetFilter={reset}/>
         </FormProvider>
       </Stack>
       <Stack sx={{ flexGrow: 1 }}>
@@ -88,7 +89,7 @@ function HomePage() {
                 <Alert severity="error">{error}</Alert>
               ) : (
                 <>
-                  <MovieList movies={movies.slice(startIndex, endIndex)} />
+                  <MovieList movies={filteredMovies} />
                 </>
               )}
             </>
@@ -111,12 +112,13 @@ function HomePage() {
 
 export default HomePage;
 
-function applyFilter(movies, filters) {
+function applyFilter(movies, filters, genres) {
   let filteredMovies = movies;
-  // if(filters.genre.length > 0){
-  //   filteredMovies = movies.filter((movie) =>
-  //     filters.genre.includes(movie.genre_ids)
-  //   );
-  // }
+
+    if (filters.genre) {
+    const genreId = genres.find((item) => item.name === filters.genre).id;
+    filteredMovies = movies.filter((movie) => movie.genre_ids.includes(genreId));
+  }
+
   return filteredMovies;
 }
