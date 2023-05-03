@@ -47,14 +47,16 @@ function HomePage() {
         );
         setGenres(resGenres.data.genres);
         console.log("Genres", resGenres.data.genres);
-
+        console.log("Popular", resPopular.data.results);
+        
         if (q) {
           const resSearch = await apiService.get(
             `${searchURL}?api_key=${apiKey}&query=${q}`
           );
           setMovies(resSearch.data.results);
+          console.log("Search", resSearch.data.results);
         } else {
-          setMovies(resPopular.data.items);
+          setMovies(resPopular.data.results);
         }
         // console.log("Movies", response.data.items);
         setError("");

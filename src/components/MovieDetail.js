@@ -1,9 +1,9 @@
-import { CardActionArea, Stack, Fab } from "@mui/material";
+import { Stack, Fab } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import PlayIcon from "@mui/icons-material/Add";
-import { BASE_URL } from "../app/config";
+
 
 function MovieDetail({ movie }) {
   return (
