@@ -5,11 +5,11 @@ import { Alert, Box, Container, Stack } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
-// import Typography from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
-// import GenreList from "../components/GenreList";
 import MovieFilter from "../components/MovieFilter";
 import MovieSearch from "../components/MovieSearch";
+// import  '../App.css';
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
 // const movieListURL = "/list/28";
@@ -70,7 +70,7 @@ function HomePage() {
   }, [q]);
 
   return (
-    <Container sx={{ display: "flex" }}>
+    <Container sx={{ display: "flex" }} className="movie-list">
       <Stack>
         <FormProvider methods={methods}>
           <MovieFilter genres={genres} resetFilter={reset} />
@@ -81,6 +81,8 @@ function HomePage() {
           <MovieSearch />
         </FormProvider>
         <Box sx={{ position: "relative", height: 1 }}>
+          <Typography variant="h4" sx={{ fontWeight: 600 }}>Popular Movies</Typography>
+
           {loading ? (
             <LoadingScreen />
           ) : (

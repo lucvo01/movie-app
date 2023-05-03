@@ -5,11 +5,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// import ImageListItem from "@mui/material/ImageListItem";
 import { styled } from "@mui/material/styles";
 // import { fCurrency } from "../utils";
-// import apiService from "../app/apiService";
-// import { BASE_URL } from "../app/config";
+
 
 // Define the styles for the Card component
 const StyledCard = styled(Card)({

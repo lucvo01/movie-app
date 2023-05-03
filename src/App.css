@@ -1,0 +1,13 @@
+@media only screen and (min-width: 786px) and (max-width: 1024px){
+    .movie-list{
+        width: 100%;
+        height: auto
+    }
+}
+
+@media only screen and (max-width: 480px){
+    .movie-list{
+        width: 100%;
+        height: auto;
+    }
+}
