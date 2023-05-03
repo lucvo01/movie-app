@@ -5,26 +5,25 @@ import { Alert, Box, Container, Stack } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
-import Typography from "@mui/material/Typography";
+// import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 // import GenreList from "../components/GenreList";
 import MovieFilter from "../components/MovieFilter";
 import MovieSearch from "../components/MovieSearch";
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
-const movieListURL = "/list/28";
+// const movieListURL = "/list/28";
+const moviePopularURL = "/movie/popular";
 const genresURL = "/genre/movie/list";
 const searchURL = "/search/multi";
-// const searchQuery = 'The%20Super%20Mario%20Bros';
 
 function HomePage() {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
-  // const [searchQuery, setSearchQuery] = useState("The Super Mario Bros");
+  // const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // const defaultValues = {};
   const methods = useForm();
   const { watch, reset } = methods;
   const filters = watch();
@@ -40,26 +39,25 @@ function HomePage() {
     const fetch = async () => {
       setLoading(true);
       try {
-        const response = await apiService.get(
-          `${movieListURL}?api_key=${apiKey}`
+        const resPopular = await apiService.get(
+          `${moviePopularURL}?api_key=${apiKey}`
         );
+
         const resGenres = await apiService.get(
           `${genresURL}?api_key=${apiKey}`
         );
-        const resSearch = await apiService.get(
-          `${searchURL}?api_key=${apiKey}&query=${q}`
-        );
-
         setGenres(resGenres.data.genres);
         console.log("Genres", resGenres.data.genres);
 
-        setMovies(response.data.items);
-        console.log("Movies", response.data.items);
-
-        // setSearchQuery(resSearch);
-        console.log("Search", resSearch.data);
-        console.log("Search", `${searchURL}?api_key=${apiKey}&query=${q}`);
-
+        if (q) {
+          const resSearch = await apiService.get(
+            `${searchURL}?api_key=${apiKey}&query=${q}`
+          );
+          setMovies(resSearch.data.results);
+        } else {
+          setMovies(resPopular.data.items);
+        }
+        // console.log("Movies", response.data.items);
         setError("");
       } catch (error) {
         console.log(error);
@@ -68,7 +66,7 @@ function HomePage() {
       setLoading(false);
     };
     fetch();
-  }, []);
+  }, [q]);
 
   return (
     <Container sx={{ display: "flex" }}>
@@ -117,7 +115,6 @@ export default HomePage;
 function applyFilter(movies, filters, genres) {
   let filteredMovies = movies;
   let q = "";
-
   if (filters.genreName) {
     const genreId = genres.find((genre) => genre.name === filters.genreName).id;
     filteredMovies = movies.filter((movie) =>

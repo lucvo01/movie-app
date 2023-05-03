@@ -31,9 +31,6 @@ function MovieCard({ movie }) {
           height="200"
           image={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
           onClick={() =>
-            // console.log(
-            //   `https://api.themoviedb.org/3/movie/${movie.id}/images?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US/${movie.backdrop_path}`
-            // )
             navigate(`/movie/${movie.id}`)
           }
           alt="green iguana"
@@ -51,17 +48,6 @@ function MovieCard({ movie }) {
             <Typography component="span" sx={{}}>
               Release Date: {movie.release_date}
             </Typography>
-            {/* {movie.priceSale && (
-              <Typography
-                component="span"
-                sx={{ color: "text.disabled", textDecoration: "line-through" }}
-              >
-                {fCurrency(movie.budget)}
-              </Typography>
-            )} */}
-            {/* <Typography variant="subtitle1">
-              {fCurrency(movie.price)}
-            </Typography> */}
           </Stack>
         </CardContent>
       </CardActionArea>
