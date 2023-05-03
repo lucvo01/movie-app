@@ -18,7 +18,7 @@ function DetailPage() {
         );
         setMovie(response.data);
         setError("");
-        console.log("Movie Detail", response.data)
+        console.log("Movie Detail", response.data);
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -31,7 +31,7 @@ function DetailPage() {
   return (
     <div>
       <h1>DetailPage - MovieId: {params.id}</h1>
-      <MovieDetail movie={movie}/>
+      <MovieDetail movie={movie} />
     </div>
   );
 }

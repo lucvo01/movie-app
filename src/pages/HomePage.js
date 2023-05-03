@@ -20,7 +20,6 @@ const searchURL = "/search/multi";
 function HomePage() {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
-  // const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
