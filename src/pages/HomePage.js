@@ -24,13 +24,16 @@ function HomePage() {
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const methods = useForm();
+  const defaultValues = {}
+  const methods = useForm({defaultValues});
   const { handleSubmit, watch, reset } = methods;
   const filters = watch();
   const { filteredMovies, q } = applyFilter(movies, filters, genres);
 
   const onSubmit = (data) => {
-    setSearchQuery(data.searchQuery);
+     setSearchQuery(data.query);
+    console.log("submit", searchQuery);
+    
   };
 
   const [page, setPage] = useState(1);
@@ -132,8 +135,8 @@ function applyFilter(movies, filters, genres) {
     );
   }
 
-  if (filters.searchQuery) {
-    q = filters.searchQuery;
+  if (filters.query) {
+    q = filters.query;
   }
 
   return { filteredMovies, q };

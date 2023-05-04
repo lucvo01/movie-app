@@ -7,7 +7,7 @@ import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AuthRequire from "./AuthRequire";
-
+import Favorite from '../pages/Favorite';
 function Router() {
   return (
     <Routes>
@@ -20,6 +20,7 @@ function Router() {
         }>
         <Route index element={<HomePage />} />
         <Route path="movie/:id" element={<DetailPage />} />
+        <Route path="/favorite" element={<Favorite />} />
       </Route>
 
       <Route element={<BlankLayout />}>

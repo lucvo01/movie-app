@@ -2,28 +2,25 @@ import { InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import { FTextField } from "./form";
+// import { useState } from "react";
 
 function MovieSearch({ onSubmit }) {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit({ searchQuery: event.target.searchQuery.value });
-  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FTextField
-        name="searchQuery"
+ <form onSubmit={onSubmit}>
+      <FTextField 
+        name="query"
         sx={{ width: 300 }}
         size="small"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon onClick={handleSubmit} />
+              <SearchIcon />
             </InputAdornment>
           )
         }}
       />
-    </form>
+</form>
   );
 }
 export default MovieSearch;

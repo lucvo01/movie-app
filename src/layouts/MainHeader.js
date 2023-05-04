@@ -4,13 +4,17 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
+import { Button } from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 function MainHeader() {
   const { user } = useAuth();
-
+  const navigate = useNavigate();
+  const handleClickLogout = () => {
+    navigate('/favorite')
+  }
   return (
     <Box>
       <AppBar position="static">
@@ -26,6 +30,14 @@ function MainHeader() {
           <Typography variant="h6" color="inherit" component="div">
             Movie App
           </Typography>
+          <Button
+                  onClick={handleClickLogout}
+                  // startIcon={<LogoutIcon />}
+                  variant="contained"
+                  sx={{ marginLeft: "2rem" }}
+                >
+                  Favorite
+            </Button>
           <Box sx={{ flexGrow: 1 }} />
           <Typography variant="h6" color="inherit" component="div">
             Welcome {user?.username}!
