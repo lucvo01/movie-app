@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 // import { fCurrency } from "../utils";
 
-
 // Define the styles for the Card component
 const StyledCard = styled(Card)({
+  position: "relative",
   transition: "transition 0.2s",
   "&:hover": {
     transform: "scale(1.2)",
@@ -28,9 +28,7 @@ function MovieCard({ movie }) {
           component="img"
           height="200"
           image={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
-          onClick={() =>
-            navigate(`/movie/${movie.id}`)
-          }
+          onClick={() => navigate(`/movie/${movie.id}`)}
           alt="green iguana"
         />
         <CardContent>

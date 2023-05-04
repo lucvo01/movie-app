@@ -22,11 +22,16 @@ function HomePage() {
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const methods = useForm();
-  const { watch, reset } = methods;
+  const { handleSubmit, watch, reset } = methods;
   const filters = watch();
   const { filteredMovies, q } = applyFilter(movies, filters, genres);
+
+  const onSubmit = (data) => {
+    setSearchQuery(data.searchQuery);
+  };
 
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(filteredMovies.length / 12);
@@ -48,10 +53,10 @@ function HomePage() {
         setGenres(resGenres.data.genres);
         console.log("Genres", resGenres.data.genres);
         console.log("Popular", resPopular.data.results);
-        
-        if (q) {
+
+        if (searchQuery) {
           const resSearch = await apiService.get(
-            `${searchURL}?api_key=${apiKey}&query=${q}`
+            `${searchURL}?api_key=${apiKey}&query=${searchQuery}`
           );
           setMovies(resSearch.data.results);
           console.log("Search", resSearch.data.results);
@@ -67,7 +72,7 @@ function HomePage() {
       setLoading(false);
     };
     fetch();
-  }, [q]);
+  }, [searchQuery]);
 
   return (
     <Container sx={{ display: "flex" }} className="movie-list">
@@ -78,10 +83,12 @@ function HomePage() {
       </Stack>
       <Stack sx={{ flexGrow: 1 }}>
         <FormProvider methods={methods}>
-          <MovieSearch />
+          <MovieSearch onSubmit={handleSubmit(onSubmit)} />
         </FormProvider>
         <Box sx={{ position: "relative", height: 1 }}>
-          <Typography variant="h4" sx={{ fontWeight: 600 }}>Popular Movies</Typography>
+          <Typography variant="h4" sx={{ fontWeight: 600 }}>
+            Popular Movies
+          </Typography>
 
           {loading ? (
             <LoadingScreen />
