@@ -23,6 +23,7 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [favoriteList, setFavoriteList] = useState(JSON.parse(localStorage.getItem("favorite")) || []);
 
   const defaultValues = {}
   const methods = useForm({defaultValues});
@@ -33,8 +34,10 @@ function HomePage() {
   const onSubmit = (data) => {
      setSearchQuery(data.query);
     console.log("submit", searchQuery);
-    
   };
+
+  // let favoriteList = [];
+  // window.localStorage.setItem("favorite", JSON.stringify(favoriteList));
 
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(filteredMovies.length / 12);
@@ -102,6 +105,7 @@ function HomePage() {
               ) : (
                 <>
                   <MovieList
+                  setFavoriteList ={setFavoriteList}
                     movies={filteredMovies.slice(startIndex, endIndex)}
                   />
                 </>

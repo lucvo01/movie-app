@@ -5,7 +5,15 @@ import React from "react";
 import PlayIcon from "@mui/icons-material/Add";
 
 
-function MovieDetail({ movie }) {
+function MovieDetail({ setFavoriteList, movie }) {
+
+  const handleClick = () => {
+   const newFavoriteList = JSON.parse(localStorage.getItem("favorite"));
+   newFavoriteList.push(movie.id);
+   window.localStorage.setItem('favorite', JSON.stringify(newFavoriteList));
+   setFavoriteList(newFavoriteList);
+  }
+
   return (
     <Stack>
       {/* <CardActionArea>  */}
@@ -15,7 +23,7 @@ function MovieDetail({ movie }) {
         title="green iguana"
       />
       <Fab color="primary" aria-label="add">
-        <PlayIcon />
+        <PlayIcon onClick={handleClick}/>
       </Fab>
       {/* </CardActionArea> */}
       <Typography>
