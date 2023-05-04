@@ -143,5 +143,6 @@ function applyFilter(movies, filters, genres) {
     q = filters.query;
   }
 
+
   return { filteredMovies, q };
 }
