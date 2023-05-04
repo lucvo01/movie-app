@@ -1,18 +1,21 @@
 import { Stack, Fab } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, { useState } from "react";
 import PlayIcon from "@mui/icons-material/Add";
 
-
-function MovieDetail({ setFavoriteList, movie }) {
+function MovieDetail({ movie }) {
+const [favoriteList, setFavoriteList] = useState([]);
 
   const handleClick = () => {
-   const newFavoriteList = JSON.parse(localStorage.getItem("favorite"));
-   newFavoriteList.push(movie.id);
-   window.localStorage.setItem('favorite', JSON.stringify(newFavoriteList));
-   setFavoriteList(newFavoriteList);
+  let newFavoriteList = JSON.parse(localStorage.getItem("favorite")) || [];
+  if (!newFavoriteList.includes(movie.id)) {
+    newFavoriteList.push(movie.id);
   }
+  
+  window.localStorage.setItem('favorite', JSON.stringify(newFavoriteList));
+  setFavoriteList(newFavoriteList);
+}
 
   return (
     <Stack>

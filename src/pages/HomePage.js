@@ -23,7 +23,7 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [favoriteList, setFavoriteList] = useState(JSON.parse(localStorage.getItem("favorite")) || []);
+  // const [favoriteList, setFavoriteList] = useState(JSON.parse(localStorage.getItem("favorite")) || []);
 
   const defaultValues = {}
   const methods = useForm({defaultValues});
@@ -105,7 +105,7 @@ function HomePage() {
               ) : (
                 <>
                   <MovieList
-                  setFavoriteList ={setFavoriteList}
+                  // setFavoriteList ={setFavoriteList}
                     movies={filteredMovies.slice(startIndex, endIndex)}
                   />
                 </>
