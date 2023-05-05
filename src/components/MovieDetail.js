@@ -1,21 +1,33 @@
-import { Stack, Fab } from "@mui/material";
+import { Stack, Fab, Button } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
-import PlayIcon from "@mui/icons-material/Add";
+import React, { useState, useEffect } from "react";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 function MovieDetail({ movie }) {
-const [favoriteList, setFavoriteList] = useState([]);
+  // let defaultList = JSON.parse(localStorage.setItem("favorite", []));
+
+  const [favoriteList, setFavoriteList] = useState(
+    JSON.parse(localStorage.getItem("favorite")) || []
+  );
+  const [favorite, setFavorite] = useState(false);
 
   const handleClick = () => {
-  let newFavoriteList = JSON.parse(localStorage.getItem("favorite")) || [];
-  if (!newFavoriteList.includes(movie.id)) {
-    newFavoriteList.push(movie.id);
-  }
-  
-  window.localStorage.setItem('favorite', JSON.stringify(newFavoriteList));
-  setFavoriteList(newFavoriteList);
-}
+    setFavorite(!favorite);
+  };
+
+  useEffect(() => {
+    if (favorite && !favoriteList.includes(movie.id)) {
+      favoriteList.push(movie.id);
+      window.localStorage.setItem("favorite", JSON.stringify(favoriteList));
+    }
+    if (!favorite && favoriteList.includes(movie.id)) {
+      const newFavoriteList = favoriteList.filter((item) => item !== movie.id);
+      window.localStorage.setItem("favorite", JSON.stringify(newFavoriteList));
+      setFavoriteList(newFavoriteList);
+    }
+  }, [favorite, movie.id]);
 
   return (
     <Stack>
@@ -25,9 +37,18 @@ const [favoriteList, setFavoriteList] = useState([]);
         image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
         title="green iguana"
       />
-      <Fab color="primary" aria-label="add">
-        <PlayIcon onClick={handleClick}/>
-      </Fab>
+      <Button onClick={handleClick}>
+        {favorite ? (
+          <Fab color="primary" aria-label="add">
+            <FavoriteIcon />
+          </Fab>
+        ) : (
+          <Fab color="primary" aria-label="minus">
+            <FavoriteBorderIcon />
+          </Fab>
+        )}
+      </Button>
+
       {/* </CardActionArea> */}
       <Typography>
         <h1>{movie.title}</h1>

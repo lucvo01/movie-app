@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import apiService from "../app/apiService";
-import { Alert, Box, Container, Stack } from "@mui/material";
+import { Alert, Box, Button, Container, Stack } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
@@ -23,21 +23,33 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [favorite, setFavorite] = useState(false);
   // const [favoriteList, setFavoriteList] = useState(JSON.parse(localStorage.getItem("favorite")) || []);
 
-  const defaultValues = {}
-  const methods = useForm({defaultValues});
+  // const handleFavorite = () => {
+  //   setFavorite(!favorite);
+  // };
+
+  const favoriteList = window.localStorage.getItem("favorite");
+  const favoriteMovies = movies.filter(
+    (movie) => favoriteList && favoriteList.includes(movie.id)
+  );
+
+  const defaultValues = {};
+  const methods = useForm({ defaultValues });
   const { handleSubmit, watch, reset } = methods;
   const filters = watch();
-  const { filteredMovies, q } = applyFilter(movies, filters, genres);
+  const { filteredMovies, q } = applyFilter(
+    movies,
+    filters,
+    genres,
+    favoriteList
+  );
 
   const onSubmit = (data) => {
-     setSearchQuery(data.query);
+    setSearchQuery(data.query);
     console.log("submit", searchQuery);
   };
-
-  // let favoriteList = [];
-  // window.localStorage.setItem("favorite", JSON.stringify(favoriteList));
 
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(filteredMovies.length / 12);
@@ -91,11 +103,8 @@ function HomePage() {
         <FormProvider methods={methods}>
           <MovieSearch onSubmit={handleSubmit(onSubmit)} />
         </FormProvider>
+        <Button onClick={() => setFavorite(!favorite)}>Favorite</Button>
         <Box sx={{ position: "relative", height: 1 }}>
-          <Typography variant="h4" sx={{ fontWeight: 600 }}>
-            Popular Movies
-          </Typography>
-
           {loading ? (
             <LoadingScreen />
           ) : (
@@ -104,10 +113,25 @@ function HomePage() {
                 <Alert severity="error">{error}</Alert>
               ) : (
                 <>
-                  <MovieList
-                  // setFavoriteList ={setFavoriteList}
-                    movies={filteredMovies.slice(startIndex, endIndex)}
-                  />
+                  {favorite ? (
+                    <>
+                      <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                        Favorite Movies
+                      </Typography>
+                      <MovieList
+                        movies={favoriteMovies.slice(startIndex, endIndex)}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                        Popular Movies
+                      </Typography>
+                      <MovieList
+                        movies={filteredMovies.slice(startIndex, endIndex)}
+                      />
+                    </>
+                  )}
                 </>
               )}
             </>
@@ -142,7 +166,6 @@ function applyFilter(movies, filters, genres) {
   if (filters.query) {
     q = filters.query;
   }
-
 
   return { filteredMovies, q };
 }
