@@ -10,6 +10,8 @@ import Pagination from "@mui/material/Pagination";
 import MovieFilter from "../components/MovieFilter";
 import MovieSearch from "../components/MovieSearch";
 // import  '../App.css';
+import Switch from "@mui/material/Switch";
+import FavoriteSwitch from "../components/FavoriteSwitch";
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
 // const movieListURL = "/list/28";
@@ -24,16 +26,11 @@ function HomePage() {
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [favorite, setFavorite] = useState(false);
-  // const [favoriteList, setFavoriteList] = useState(JSON.parse(localStorage.getItem("favorite")) || []);
 
-  // const handleFavorite = () => {
-  //   setFavorite(!favorite);
-  // };
-
-  const favoriteList = window.localStorage.getItem("favorite");
-  const favoriteMovies = movies.filter(
-    (movie) => favoriteList && favoriteList.includes(movie.id)
-  );
+  // const favoriteList = window.localStorage.getItem("favorite");
+  // const favoriteMovies = movies.filter(
+  //   (movie) => favoriteList && favoriteList.includes(movie.id)
+  // );
 
   const defaultValues = {};
   const methods = useForm({ defaultValues });
@@ -43,7 +40,8 @@ function HomePage() {
     movies,
     filters,
     genres,
-    favoriteList
+
+    favorite
   );
 
   const onSubmit = (data) => {
@@ -72,9 +70,9 @@ function HomePage() {
         console.log("Genres", resGenres.data.genres);
         console.log("Popular", resPopular.data.results);
 
-        if (searchQuery) {
+        if (q) {
           const resSearch = await apiService.get(
-            `${searchURL}?api_key=${apiKey}&query=${searchQuery}`
+            `${searchURL}?api_key=${apiKey}&query=${q}`
           );
           setMovies(resSearch.data.results);
           console.log("Search", resSearch.data.results);
@@ -90,7 +88,7 @@ function HomePage() {
       setLoading(false);
     };
     fetch();
-  }, [searchQuery]);
+  }, [q]);
 
   return (
     <Container sx={{ display: "flex" }} className="movie-list">
@@ -103,6 +101,15 @@ function HomePage() {
         <FormProvider methods={methods}>
           <MovieSearch onSubmit={handleSubmit(onSubmit)} />
         </FormProvider>
+        {/* <FormProvider methods={methods}>
+          <FavoriteSwitch handleChange={() => setFavorite(!favorite)} />
+        </FormProvider> */}
+        <Switch
+          label="Favorite"
+          // checked={checked}
+          onChange={() => setFavorite(!favorite)}
+          inputProps={{ "aria-label": "controlled" }}
+        />
         <Button onClick={() => setFavorite(!favorite)}>Favorite</Button>
         <Box sx={{ position: "relative", height: 1 }}>
           {loading ? (
@@ -119,7 +126,7 @@ function HomePage() {
                         Favorite Movies
                       </Typography>
                       <MovieList
-                        movies={favoriteMovies.slice(startIndex, endIndex)}
+                        movies={filteredMovies.slice(startIndex, endIndex)}
                       />
                     </>
                   ) : (
@@ -153,7 +160,7 @@ function HomePage() {
 
 export default HomePage;
 
-function applyFilter(movies, filters, genres) {
+function applyFilter(movies, filters, genres, favorite) {
   let filteredMovies = movies;
   let q = "";
   if (filters.genreName) {
@@ -165,6 +172,21 @@ function applyFilter(movies, filters, genres) {
 
   if (filters.query) {
     q = filters.query;
+  }
+
+  if (favorite) {
+    const favoriteList = window.localStorage.getItem("favorite");
+    filteredMovies = movies.filter(
+      (movie) => favoriteList && favoriteList.includes(movie.id)
+    );
+    if (filters.genreName) {
+      const genreId = genres.find(
+        (genre) => genre.name === filters.genreName
+      ).id;
+      filteredMovies = filteredMovies.filter((movie) =>
+        movie.genre_ids.includes(genreId)
+      );
+    }
   }
 
   return { filteredMovies, q };

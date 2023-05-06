@@ -1,4 +1,4 @@
-import { Stack, Fab, Button } from "@mui/material";
+import { Stack, Fab, Button, Box } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import React, { useState, useEffect } from "react";
@@ -6,12 +6,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 function MovieDetail({ movie }) {
-  // let defaultList = JSON.parse(localStorage.setItem("favorite", []));
-
   const [favoriteList, setFavoriteList] = useState(
     JSON.parse(localStorage.getItem("favorite")) || []
   );
-  const [favorite, setFavorite] = useState(false);
+  // const isFavorite = favoriteList.includes(movie.id);
+  const [favorite, setFavorite] = useState(favoriteList.includes(movie.id));
 
   const handleClick = () => {
     setFavorite(!favorite);
@@ -27,27 +26,36 @@ function MovieDetail({ movie }) {
       window.localStorage.setItem("favorite", JSON.stringify(newFavoriteList));
       setFavoriteList(newFavoriteList);
     }
-  }, [favorite, movie.id]);
+  }, [favorite]);
 
   return (
     <Stack>
       {/* <CardActionArea>  */}
       <CardMedia
-        sx={{ height: 600, width: 950 }}
+        sx={{ height: 600, width: 950, position: "relative" }}
         image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
         title="green iguana"
-      />
-      <Button onClick={handleClick}>
-        {favorite ? (
-          <Fab color="primary" aria-label="add">
-            <FavoriteIcon />
-          </Fab>
-        ) : (
-          <Fab color="primary" aria-label="minus">
-            <FavoriteBorderIcon />
-          </Fab>
-        )}
-      </Button>
+      >
+        <Box
+          onClick={handleClick}
+          sx={{
+            position: "absolute",
+            bottom: 50,
+            right: "50px",
+            zIndex: 1
+          }}
+        >
+          {favorite ? (
+            <Fab color="primary" aria-label="add">
+              <FavoriteIcon />
+            </Fab>
+          ) : (
+            <Fab color="primary" aria-label="minus">
+              <FavoriteBorderIcon />
+            </Fab>
+          )}
+        </Box>
+      </CardMedia>
 
       {/* </CardActionArea> */}
       <Typography>

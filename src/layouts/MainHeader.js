@@ -8,6 +8,7 @@ import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Switch from "@mui/material/Switch";
 
 function MainHeader() {
   const { user } = useAuth();
@@ -30,14 +31,19 @@ function MainHeader() {
           <Typography variant="h6" color="inherit" component="div">
             Movie App
           </Typography>
-          <Button
+          {/* <Switch
+            // checked={checked}
+            onChange={handleFavorite}
+            inputProps={{ "aria-label": "controlled" }}
+          /> */}
+          {/* <Button
             onClick={handleFavorite}
             // startIcon={<LogoutIcon />}
             variant="contained"
             sx={{ marginLeft: "2rem" }}
           >
             Favorite
-          </Button>
+          </Button> */}
           <Box sx={{ flexGrow: 1 }} />
           <Typography variant="h6" color="inherit" component="div">
             Welcome {user?.username}!

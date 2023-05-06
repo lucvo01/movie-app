@@ -13,7 +13,6 @@ function MovieFilter({ genres, resetFilter }) {
         name="genreName"
         options={genres.map((item) => item.name)}
         row={false}
-        onClick={(event) => console.log(event.target.id)}
       />
       <Box>
         <Button
