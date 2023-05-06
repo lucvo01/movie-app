@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import apiService from "../app/apiService";
-import { Alert, Box, Button, Container, Stack } from "@mui/material";
+import { Alert, Box, Button, Container, Stack, Divider } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
@@ -11,8 +11,9 @@ import MovieFilter from "../components/MovieFilter";
 import MovieSearch from "../components/MovieSearch";
 // import  '../App.css';
 import Switch from "@mui/material/Switch";
-import FavoriteSwitch from "../components/FavoriteSwitch";
+// import FavoriteSwitch from "../components/FavoriteSwitch";
 import { useSearchParams } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
 // const movieListURL = "/list/28";
@@ -21,29 +22,20 @@ const genresURL = "/genre/movie/list";
 const searchURL = "/search/multi";
 
 function HomePage() {
+  const theme = useTheme();
+
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
   const [favorite, setFavorite] = useState(false);
-
   let [searchParams, setSearchParams] = useSearchParams();
-  // const favoriteList = window.localStorage.getItem("favorite");
-  // const favoriteMovies = movies.filter(
-  //   (movie) => favoriteList && favoriteList.includes(movie.id)
-  // );
 
   const defaultValues = {};
   const methods = useForm({ defaultValues });
-  const { handleSubmit, watch, reset } = methods;
+  const { watch, reset } = methods;
   const filters = watch();
   const { filteredMovies, q } = applyFilter(movies, filters, genres, favorite);
-
-  // const onSubmit = (data) => {
-  //   setSearchQuery(data.query);
-  //   // console.log("submit", searchQuery);
-  // };
 
   useEffect(() => {
     if (searchParams.get("query")) {
@@ -53,7 +45,6 @@ function HomePage() {
 
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(filteredMovies.length / 12);
-
   const startIndex = (page - 1) * 12;
   const endIndex = startIndex + 12;
 
@@ -94,66 +85,87 @@ function HomePage() {
 
   return (
     <Container sx={{ display: "flex" }} className="movie-list">
-      <Stack>
-        <FormProvider methods={methods}>
-          <MovieFilter genres={genres} resetFilter={reset} />
-        </FormProvider>
-      </Stack>
-      <Stack sx={{ flexGrow: 1 }}>
-        <FormProvider methods={methods}>
-          <MovieSearch />
-        </FormProvider>
-        {/* <FormProvider methods={methods}>
-          <FavoriteSwitch handleChange={() => setFavorite(!favorite)} />
-        </FormProvider> */}
-        <Switch
-          label="Favorite"
-          // checked={checked}
-          onChange={() => setFavorite(!favorite)}
-          inputProps={{ "aria-label": "controlled" }}
-        />
-        <Button onClick={() => setFavorite(!favorite)}>Favorite</Button>
-        <Box sx={{ position: "relative", height: 1 }}>
-          {loading ? (
-            <LoadingScreen />
-          ) : (
-            <>
-              {error ? (
-                <Alert severity="error">{error}</Alert>
-              ) : (
-                <>
-                  {favorite ? (
-                    <>
-                      <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                        Favorite Movies
-                      </Typography>
-                      <MovieList
-                        movies={filteredMovies.slice(startIndex, endIndex)}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                        Popular Movies
-                      </Typography>
-                      <MovieList
-                        movies={filteredMovies.slice(startIndex, endIndex)}
-                      />
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </Box>
-        <Stack spacing={2} sx={{ alignItems: "center" }}>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(event, value) => {
-              setPage(value);
+      <Stack
+        marginTop={3}
+        direction="row"
+        divider={<Divider orientation="vertical" flexItem />}
+        spacing={5}
+      >
+        <Stack>
+          <FormProvider methods={methods}>
+            <MovieFilter genres={genres} resetFilter={reset} />
+          </FormProvider>
+        </Stack>
+        <Stack sx={{ flexGrow: 1, gap: 3 }}>
+          <Stack
+            sx={{
+              alignItems: "center"
             }}
-          />
+          >
+            <Box>
+              <FormProvider methods={methods}>
+                <MovieSearch />
+                <Button
+                  onClick={() => setFavorite(!favorite)}
+                  sx={{
+                    marginLeft: 2,
+                    color: theme.palette.primary.lighter,
+                    backgroundColor: theme.palette.primary.dark
+                  }}
+                >
+                  <b>Favorite</b>
+                </Button>
+              </FormProvider>
+              {/* <Switch
+              label="Favorite"
+              // checked={checked}
+              onChange={() => setFavorite(!favorite)}
+              inputProps={{ "aria-label": "controlled" }}
+            /> */}
+            </Box>
+          </Stack>
+          <Box sx={{ position: "relative", height: 1 }}>
+            {loading ? (
+              <LoadingScreen />
+            ) : (
+              <>
+                {error ? (
+                  <Alert severity="error">{error}</Alert>
+                ) : (
+                  <>
+                    {favorite ? (
+                      <>
+                        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                          Favorite Movies
+                        </Typography>
+                        <MovieList
+                          movies={filteredMovies.slice(startIndex, endIndex)}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                          Popular Movies
+                        </Typography>
+                        <MovieList
+                          movies={filteredMovies.slice(startIndex, endIndex)}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </Box>
+          <Stack sx={{ alignItems: "center" }}>
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={(event, value) => {
+                setPage(value);
+              }}
+            />
+          </Stack>
         </Stack>
       </Stack>
     </Container>

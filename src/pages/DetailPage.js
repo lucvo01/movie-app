@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import apiService from "../app/apiService";
 import MovieDetail from "../components/MovieDetail";
+import { Container } from "@mui/material";
 
 function DetailPage() {
   let params = useParams();
@@ -29,10 +30,14 @@ function DetailPage() {
   }, []);
 
   return (
-    <div>
-      <h1>DetailPage - MovieId: {params.id}</h1>
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
       {movie && <MovieDetail movie={movie} />}
-    </div>
+    </Container>
   );
 }
 

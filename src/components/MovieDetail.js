@@ -31,46 +31,56 @@ function MovieDetail({ movie }) {
 
   return (
     <Stack>
-      {/* <CardActionArea>  */}
-      <CardMedia
-        sx={{ height: 600, width: 950, position: "relative" }}
-        image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-        title="green iguana"
+      <Box
+        sx={{
+          p: "24px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 2
+        }}
       >
-        <Box
-          onClick={handleClick}
-          sx={{
-            position: "absolute",
-            bottom: 50,
-            right: "50px",
-            zIndex: 1
-          }}
+        {/* <CardActionArea>  */}
+        <CardMedia
+          sx={{ height: 600, width: 950, position: "relative" }}
+          image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+          title={movie.title}
         >
-          {favorite ? (
-            <Fab color="primary" aria-label="add">
-              <FavoriteIcon />
-            </Fab>
-          ) : (
-            <Fab color="primary" aria-label="minus">
-              <FavoriteBorderIcon />
-            </Fab>
-          )}
-        </Box>
-      </CardMedia>
+          <Box
+            onClick={handleClick}
+            sx={{
+              position: "absolute",
+              bottom: 50,
+              right: "50px",
+              zIndex: 1
+            }}
+          >
+            {favorite ? (
+              <Fab color="primary" aria-label="add">
+                <FavoriteIcon />
+              </Fab>
+            ) : (
+              <Fab color="primary" aria-label="minus">
+                <FavoriteBorderIcon />
+              </Fab>
+            )}
+          </Box>
+        </CardMedia>
 
-      {/* </CardActionArea> */}
-      <Typography>
-        <h1>{movie.title}</h1>
-      </Typography>
-      <Typography>
-        <b>Release Date:</b> {movie.release_date}
-      </Typography>
-      <Typography>
-        <b>Overview:</b> {movie.overview}
-      </Typography>
-      <Typography>
-        <b>Tag line:</b> {movie.tagline}
-      </Typography>
+        {/* </CardActionArea> */}
+        <Typography variant="h1" fontSize={30}>
+          <b>{movie.title}</b> - <i>{movie.tagline}</i>
+        </Typography>
+        <Typography>
+          <b>Overview:</b> {movie.overview}
+        </Typography>
+        <Typography>
+          <b>Release Date:</b> {movie.release_date}
+        </Typography>
+        <Typography>
+          <b>Tag line:</b> {movie.tagline}
+        </Typography>
+      </Box>
     </Stack>
   );
 }
