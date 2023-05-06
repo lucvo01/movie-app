@@ -5,22 +5,19 @@ import { FTextField } from "./form";
 // import { useState } from "react";
 
 function MovieSearch({ onSubmit }) {
-
   return (
- <form onSubmit={onSubmit}>
-      <FTextField 
-        name="query"
-        sx={{ width: 300 }}
-        size="small"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          )
-        }}
-      />
-</form>
+    <FTextField
+      name="query"
+      sx={{ width: 300 }}
+      size="small"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        )
+      }}
+    />
   );
 }
 export default MovieSearch;

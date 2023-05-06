@@ -5,7 +5,7 @@ import MovieDetail from "../components/MovieDetail";
 
 function DetailPage() {
   let params = useParams();
-  const [movie, setMovie] = useState([]);
+  const [movie, setMovie] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -31,7 +31,7 @@ function DetailPage() {
   return (
     <div>
       <h1>DetailPage - MovieId: {params.id}</h1>
-      <MovieDetail movie={movie} />
+      {movie && <MovieDetail movie={movie} />}
     </div>
   );
 }

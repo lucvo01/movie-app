@@ -12,6 +12,7 @@ import MovieSearch from "../components/MovieSearch";
 // import  '../App.css';
 import Switch from "@mui/material/Switch";
 import FavoriteSwitch from "../components/FavoriteSwitch";
+import { useSearchParams } from "react-router-dom";
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
 // const movieListURL = "/list/28";
@@ -27,6 +28,7 @@ function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [favorite, setFavorite] = useState(false);
 
+  let [searchParams, setSearchParams] = useSearchParams();
   // const favoriteList = window.localStorage.getItem("favorite");
   // const favoriteMovies = movies.filter(
   //   (movie) => favoriteList && favoriteList.includes(movie.id)
@@ -36,18 +38,18 @@ function HomePage() {
   const methods = useForm({ defaultValues });
   const { handleSubmit, watch, reset } = methods;
   const filters = watch();
-  const { filteredMovies, q } = applyFilter(
-    movies,
-    filters,
-    genres,
+  const { filteredMovies, q } = applyFilter(movies, filters, genres, favorite);
 
-    favorite
-  );
+  // const onSubmit = (data) => {
+  //   setSearchQuery(data.query);
+  //   // console.log("submit", searchQuery);
+  // };
 
-  const onSubmit = (data) => {
-    setSearchQuery(data.query);
-    console.log("submit", searchQuery);
-  };
+  useEffect(() => {
+    if (searchParams.get("query")) {
+      methods.setValue("query", searchParams.get("query"));
+    }
+  }, []);
 
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(filteredMovies.length / 12);
@@ -99,7 +101,7 @@ function HomePage() {
       </Stack>
       <Stack sx={{ flexGrow: 1 }}>
         <FormProvider methods={methods}>
-          <MovieSearch onSubmit={handleSubmit(onSubmit)} />
+          <MovieSearch />
         </FormProvider>
         {/* <FormProvider methods={methods}>
           <FavoriteSwitch handleChange={() => setFavorite(!favorite)} />

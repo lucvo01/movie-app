@@ -17,6 +17,7 @@ function MovieDetail({ movie }) {
   };
 
   useEffect(() => {
+    console.log(favorite);
     if (favorite && !favoriteList.includes(movie.id)) {
       favoriteList.push(movie.id);
       window.localStorage.setItem("favorite", JSON.stringify(favoriteList));
