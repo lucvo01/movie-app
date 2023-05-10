@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { FMultiCheckbox, FRadioGroup } from "./form";
+import { FRadioGroup } from "./form";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 function MovieFilter({ genres, resetFilter }) {

@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import MovieCard from "./MovieCard";
 
-function MovieList({ movies, loading}) {
+function MovieList({ movies, loading }) {
   return (
     <Grid container spacing={2} mt={1}>
       {movies.map((movie, index) => (

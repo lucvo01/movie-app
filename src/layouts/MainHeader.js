@@ -6,16 +6,10 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import Switch from "@mui/material/Switch";
 
 function MainHeader() {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const handleFavorite = () => {
-    // navigate("/favorite");
-  };
+
   return (
     <Box>
       <AppBar position="static">
@@ -31,19 +25,7 @@ function MainHeader() {
           <Typography variant="h6" color="inherit" component="div">
             Movie App
           </Typography>
-          {/* <Switch
-            // checked={checked}
-            onChange={handleFavorite}
-            inputProps={{ "aria-label": "controlled" }}
-          /> */}
-          {/* <Button
-            onClick={handleFavorite}
-            // startIcon={<LogoutIcon />}
-            variant="contained"
-            sx={{ marginLeft: "2rem" }}
-          >
-            Favorite
-          </Button> */}
+
           <Box sx={{ flexGrow: 1 }} />
           <Typography variant="h6" color="inherit" component="div">
             Welcome {user?.username}!
