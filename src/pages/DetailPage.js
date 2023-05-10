@@ -8,7 +8,7 @@ function DetailPage() {
   let params = useParams();
   const [movie, setMovie] = useState();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   useEffect(() => {
     const fetch = async () => {
@@ -18,16 +18,16 @@ function DetailPage() {
           `/movie/${params.id}?api_key=096661a0ca80af081193ef63f856a4cf&language=en-US`
         );
         setMovie(response.data);
-        setError("");
+        // setError("");
         console.log("Movie Detail", response.data);
       } catch (error) {
         console.log(error);
-        setError(error.message);
+        // setError(error.message);
       }
       setLoading(false);
     };
     fetch();
-  }, []);
+  }, [params.id]);
 
   return (
     <Container
@@ -36,7 +36,11 @@ function DetailPage() {
         flexDirection: "column"
       }}
     >
-      {movie && <MovieDetail movie={movie} />}
+      {loading ? (
+        <div>loading...</div>
+      ) : (
+        <>{movie && <MovieDetail movie={movie} />}</>
+      )}
     </Container>
   );
 }
