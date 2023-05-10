@@ -29,7 +29,7 @@ function MovieDetail({ movie }) {
       window.localStorage.setItem("favorite", JSON.stringify(newFavoriteList));
       setFavoriteList(newFavoriteList);
     }
-  }, [favorite]);
+  }, [favorite, movie.id, favoriteList]);
 
   return (
     <Stack>
