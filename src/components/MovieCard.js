@@ -25,7 +25,7 @@ function MovieCard({ movie }) {
       <CardActionArea onClick={() => navigate(`/movie/${movie.id}`)}>
         <CardMedia
           component="img"
-          height="200"
+         fullWidth
           image={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
           alt={movie.title}
         />
@@ -33,16 +33,7 @@ function MovieCard({ movie }) {
           <Typography gutterBottom variant="body1" component="div" noWrap>
             {movie.title}
           </Typography>
-          {/* <Stack
-            direction="row"
-            spacing={0.5}
-            alignItems="center"
-            justifyContent="flex-end"
-          >
-            <Typography component="span" sx={{}}>
-              Release Date: {movie.release_date}
-            </Typography>
-          </Stack> */}
+
         </CardContent>
       </CardActionArea>
     </StyledCard>

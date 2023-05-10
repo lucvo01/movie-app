@@ -10,12 +10,13 @@ function MovieFilter({ genres, resetFilter }) {
       alignItems="center"
       justifyContent="space-around"
       flexDirection={{ xs: "row", sm: "column" }}
+    
     >
       <Typography variant="h6" sx={{ fontWeight: 600 }}>
         Genre
       </Typography>
 
-      <Stack display={{xs: "flex", sm:"none"}}>
+      <Box display={{xs: "flex", sm:"none"}}>
         <FSelect name="genreName" size="small" sx={{ width: 300 }}>
           {genres.map((item) => (
             <option key={item.id} value={item.name}>
@@ -23,15 +24,15 @@ function MovieFilter({ genres, resetFilter }) {
             </option>
           ))}
         </FSelect>
-      </Stack>
+      </Box>
 
-      <Stack spacing={1} display={{ xs: "none", sm: "flex" }}>
+      <Box spacing={1} display={{ xs: "none", sm: "flex" }}>
         <FRadioGroup
           name="genreName"
           options={genres.map((item) => item.name)}
           row={false}
         />
-      </Stack>
+      </Box>
       <Box>
         <Button
           size="large"

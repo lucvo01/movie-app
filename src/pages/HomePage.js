@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import MovieFilter from "../components/MovieFilter";
 import MovieSearch from "../components/MovieSearch";
-import  '../App.css';
+// import  '../App.css';
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import useFilter from "../hooks/useFilter";
@@ -90,7 +90,7 @@ function HomePage() {
         marginTop={3}
         direction={{ xs: "column", sm: "row" }}
         divider={<Divider orientation="vertical" flexItem />}
-        spacing={5}
+        spacing={1}
       >
         <Stack className="genre-list" >
           <FormProvider methods={methods}>
