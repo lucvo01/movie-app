@@ -9,10 +9,10 @@ import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import MovieFilter from "../components/MovieFilter";
 import MovieSearch from "../components/MovieSearch";
-// import  '../App.css';
-// import Switch from "@mui/material/Switch";
+import  '../App.css';
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import useFilter from "../hooks/useFilter";
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
 // const movieListURL = "/list/28";
@@ -33,7 +33,7 @@ function HomePage() {
   const methods = useForm({ defaultValues });
   const { watch, reset } = methods;
   const filters = watch();
-  const { filteredMovies, q } = applyFilter(movies, filters, genres, favorite);
+  const { filteredMovies, q } = useFilter(movies, filters, genres, favorite);
 
   useEffect(() => {
     if (searchParams.get("query")) {
@@ -43,9 +43,11 @@ function HomePage() {
   }, [searchParams, methods]);
 
   const [page, setPage] = useState(1);
-  const totalPages = Math.ceil(filteredMovies.length / 12);
-  const startIndex = (page - 1) * 12;
-  const endIndex = startIndex + 12;
+  const [totalPages, setTotalPages] = useState(1);
+  // const totalPages = Math.ceil(filteredMovies.length / 12);
+  const startIndex = (page - 1) * 20;
+  const endIndex = startIndex + 20;
+  const genreId = filters.genreName ? genres.find(genre => genre.name === filters.genreName)?.id : null;
 
   useEffect(() => {
     const fetch = async () => {
@@ -62,12 +64,17 @@ function HomePage() {
             `${searchURL}?api_key=${apiKey}&query=${q}`
           );
           setMovies(resSearch.data.results);
+          setTotalPages(resSearch.data.total_pages)
           console.log("Search", resSearch.data.results);
         } else {
+          
           const resPopular = await apiService.get(
-            `${moviePopularURL}?api_key=${apiKey}`
-          );
+            `${moviePopularURL}?api_key=${apiKey}${genreId ? `&with_genres=${genreId}` : ''}`);
+          // const resPopular = await apiService.get(
+          //   `${moviePopularURL}?api_key=${apiKey}`
+          // );
           setMovies(resPopular.data.results);
+          setTotalPages(resPopular.data.total_pages)
           console.log("Popular", resPopular.data.results);
         }
         setError("");
@@ -78,7 +85,7 @@ function HomePage() {
       setLoading(false);
     };
     fetch();
-  }, [q]);
+  }, [q, filters.genreName, genreId]);
 
   return (
     <Container className="movie-list">
@@ -165,35 +172,35 @@ function HomePage() {
 
 export default HomePage;
 
-function applyFilter(movies, filters, genres, favorite) {
-  const { genreName, query } = filters;
-  let filteredMovies = movies;
-  let q = "";
-  if (genreName) {
-    const genreId = genres.find((genre) => genre.name === genreName).id;
-    filteredMovies = filteredMovies.filter(
-      (movie) => movie && movie.genre_ids && movie.genre_ids.includes(genreId)
-    );
-  }
+// function applyFilter(movies, filters, genres, favorite) {
+//   const { genreName, query } = filters;
+//   let filteredMovies = movies;
+//   let q = "";
+//   if (genreName) {
+//     const genreId = genres.find((genre) => genre.name === genreName).id;
+//     filteredMovies = filteredMovies.filter(
+//       (movie) => movie && movie.genre_ids && movie.genre_ids.includes(genreId)
+//     );
+//   }
 
-  if (query) {
-    q = query;
-  }
+//   if (query) {
+//     q = query;
+//   }
 
-  if (favorite) {
-    const favoriteList = window.localStorage.getItem("favorite");
-    filteredMovies = movies.filter(
-      (movie) => favoriteList && favoriteList.includes(movie.id)
-    );
-    if (genreName) {
-      const genreId = genres.find(
-        (genre) => genre.name === filters.genreName
-      ).id;
-      filteredMovies = filteredMovies.filter(
-        (movie) => movie && movie.genre_ids && movie.genre_ids.includes(genreId)
-      );
-    }
-  }
+//   if (favorite) {
+//     const favoriteList = window.localStorage.getItem("favorite");
+//     filteredMovies = movies.filter(
+//       (movie) => favoriteList && favoriteList.includes(movie.id)
+//     );
+//     if (genreName) {
+//       const genreId = genres.find(
+//         (genre) => genre.name === filters.genreName
+//       ).id;
+//       filteredMovies = filteredMovies.filter(
+//         (movie) => movie && movie.genre_ids && movie.genre_ids.includes(genreId)
+//       );
+//     }
+//   }
 
-  return { filteredMovies, q };
-}
+//   return { filteredMovies, q };
+// }
