@@ -4,7 +4,7 @@ import React from "react";
 import { FTextField } from "./form";
 // import { useState } from "react";
 
-function MovieSearch({ onSubmit }) {
+function MovieSearch() {
   return (
     <FTextField
       name="query"

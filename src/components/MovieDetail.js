@@ -1,11 +1,13 @@
-import { Stack, Fab, Button, Box } from "@mui/material";
+import { Stack, Fab, Button, Box, Chip } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import React, { useState, useEffect } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useTheme } from "@mui/material/styles";
 
 function MovieDetail({ movie }) {
+  const theme = useTheme();
   const [favoriteList, setFavoriteList] = useState(
     JSON.parse(localStorage.getItem("favorite")) || []
   );
@@ -42,7 +44,12 @@ function MovieDetail({ movie }) {
       >
         {/* <CardActionArea>  */}
         <CardMedia
-          sx={{ height: 600, width: 950, position: "relative" }}
+          sx={{
+            height: 700,
+            width: 500,
+            position: "relative"
+            // objectFit: "contain"
+          }}
           image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
           title={movie.title}
         >
@@ -75,10 +82,20 @@ function MovieDetail({ movie }) {
           <b>Overview:</b> {movie.overview}
         </Typography>
         <Typography>
+          <b>Duration:</b> {movie.runtime} minutes
+          <br />
           <b>Release Date:</b> {movie.release_date}
+          <br />
+          <b>Tag line:</b> {movie.tagline}
         </Typography>
         <Typography>
-          <b>Tag line:</b> {movie.tagline}
+          <b>Genres:</b>{" "}
+          {movie.genres.map((genre) => (
+            <Chip
+              label={`${genre.name}`}
+              sx={{ color: theme.palette.primary.light }}
+            />
+          ))}
         </Typography>
       </Box>
     </Stack>

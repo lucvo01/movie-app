@@ -10,8 +10,7 @@ import Pagination from "@mui/material/Pagination";
 import MovieFilter from "../components/MovieFilter";
 import MovieSearch from "../components/MovieSearch";
 // import  '../App.css';
-import Switch from "@mui/material/Switch";
-// import FavoriteSwitch from "../components/FavoriteSwitch";
+// import Switch from "@mui/material/Switch";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 
@@ -23,7 +22,6 @@ const searchURL = "/search/multi";
 
 function HomePage() {
   const theme = useTheme();
-
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +29,7 @@ function HomePage() {
   const [favorite, setFavorite] = useState(false);
   let [searchParams, setSearchParams] = useSearchParams();
 
-  const defaultValues = {};
+  const defaultValues = { genreName: "", query: "" };
   const methods = useForm({ defaultValues });
   const { watch, reset } = methods;
   const filters = watch();
@@ -40,6 +38,7 @@ function HomePage() {
   useEffect(() => {
     if (searchParams.get("query")) {
       methods.setValue("query", searchParams.get("query"));
+      // console.log("searchParams", searchParams.get("query"));
     }
   }, []);
 
@@ -52,16 +51,11 @@ function HomePage() {
     const fetch = async () => {
       setLoading(true);
       try {
-        const resPopular = await apiService.get(
-          `${moviePopularURL}?api_key=${apiKey}`
-        );
-
         const resGenres = await apiService.get(
           `${genresURL}?api_key=${apiKey}`
         );
         setGenres(resGenres.data.genres);
         console.log("Genres", resGenres.data.genres);
-        console.log("Popular", resPopular.data.results);
 
         if (q) {
           const resSearch = await apiService.get(
@@ -70,9 +64,12 @@ function HomePage() {
           setMovies(resSearch.data.results);
           console.log("Search", resSearch.data.results);
         } else {
+          const resPopular = await apiService.get(
+            `${moviePopularURL}?api_key=${apiKey}`
+          );
           setMovies(resPopular.data.results);
+          console.log("Popular", resPopular.data.results);
         }
-        // console.log("Movies", response.data.items);
         setError("");
       } catch (error) {
         console.log(error);
@@ -84,7 +81,7 @@ function HomePage() {
   }, [q]);
 
   return (
-    <Container sx={{ display: "flex" }} className="movie-list">
+    <Container className="movie-list">
       <Stack
         marginTop={3}
         direction="row"
@@ -116,12 +113,6 @@ function HomePage() {
                   <b>Favorite</b>
                 </Button>
               </FormProvider>
-              {/* <Switch
-              label="Favorite"
-              // checked={checked}
-              onChange={() => setFavorite(!favorite)}
-              inputProps={{ "aria-label": "controlled" }}
-            /> */}
             </Box>
           </Stack>
           <Box sx={{ position: "relative", height: 1 }}>
@@ -175,17 +166,18 @@ function HomePage() {
 export default HomePage;
 
 function applyFilter(movies, filters, genres, favorite) {
+  const { genreName, query } = filters;
   let filteredMovies = movies;
   let q = "";
-  if (filters.genreName) {
-    const genreId = genres.find((genre) => genre.name === filters.genreName).id;
-    filteredMovies = movies.filter((movie) =>
-      movie.genre_ids.includes(genreId)
+  if (genreName) {
+    const genreId = genres.find((genre) => genre.name === genreName).id;
+    filteredMovies = filteredMovies.filter(
+      (movie) => movie && movie.genre_ids && movie.genre_ids.includes(genreId)
     );
   }
 
-  if (filters.query) {
-    q = filters.query;
+  if (query) {
+    q = query;
   }
 
   if (favorite) {
@@ -193,12 +185,12 @@ function applyFilter(movies, filters, genres, favorite) {
     filteredMovies = movies.filter(
       (movie) => favoriteList && favoriteList.includes(movie.id)
     );
-    if (filters.genreName) {
+    if (genreName) {
       const genreId = genres.find(
         (genre) => genre.name === filters.genreName
       ).id;
-      filteredMovies = filteredMovies.filter((movie) =>
-        movie.genre_ids.includes(genreId)
+      filteredMovies = filteredMovies.filter(
+        (movie) => movie && movie.genre_ids && movie.genre_ids.includes(genreId)
       );
     }
   }

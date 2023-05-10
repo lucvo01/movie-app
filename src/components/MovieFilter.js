@@ -23,7 +23,7 @@ function MovieFilter({ genres, resetFilter }) {
           onClick={resetFilter}
           startIcon={<ClearAllIcon />}
         >
-          Clear All
+          Reset
         </Button>
       </Box>
     </Stack>

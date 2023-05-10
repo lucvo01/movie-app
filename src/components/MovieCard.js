@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 // import { fCurrency } from "../utils";
 
-// Define the styles for the Card component
 const StyledCard = styled(Card)({
   position: "relative",
   transition: "transition 0.2s",
@@ -23,19 +22,18 @@ function MovieCard({ movie }) {
 
   return (
     <StyledCard>
-      <CardActionArea>
+      <CardActionArea onClick={() => navigate(`/movie/${movie.id}`)}>
         <CardMedia
           component="img"
           height="200"
           image={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
-          onClick={() => navigate(`/movie/${movie.id}`)}
-          alt="green iguana"
+          alt={movie.title}
         />
         <CardContent>
           <Typography gutterBottom variant="body1" component="div" noWrap>
             {movie.title}
           </Typography>
-          <Stack
+          {/* <Stack
             direction="row"
             spacing={0.5}
             alignItems="center"
@@ -44,7 +42,7 @@ function MovieCard({ movie }) {
             <Typography component="span" sx={{}}>
               Release Date: {movie.release_date}
             </Typography>
-          </Stack>
+          </Stack> */}
         </CardContent>
       </CardActionArea>
     </StyledCard>
