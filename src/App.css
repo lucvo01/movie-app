@@ -10,4 +10,8 @@
         width: 100%;
         height: auto;
     }
+      .genre-list {
+      display: none;
+    }
 }
+

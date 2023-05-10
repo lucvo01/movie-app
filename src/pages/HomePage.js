@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import apiService from "../app/apiService";
-import { Alert, Box, Button, Container, Stack, Divider } from "@mui/material";
+import { Alert, Box, Button, Grid , Stack, Divider } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
@@ -67,12 +67,9 @@ function HomePage() {
           setTotalPages(resSearch.data.total_pages)
           console.log("Search", resSearch.data.results);
         } else {
-          
           const resPopular = await apiService.get(
             `${moviePopularURL}?api_key=${apiKey}${genreId ? `&with_genres=${genreId}` : ''}`);
-          // const resPopular = await apiService.get(
-          //   `${moviePopularURL}?api_key=${apiKey}`
-          // );
+
           setMovies(resPopular.data.results);
           setTotalPages(resPopular.data.total_pages)
           console.log("Popular", resPopular.data.results);
@@ -88,16 +85,16 @@ function HomePage() {
   }, [q, filters.genreName, genreId]);
 
   return (
-    <Container className="movie-list">
+    <Grid container className="movie-list">
       <Stack
         marginTop={3}
-        direction="row"
+        direction={{ xs: "column", sm: "row" }}
         divider={<Divider orientation="vertical" flexItem />}
         spacing={5}
       >
-        <Stack>
+        <Stack className="genre-list" >
           <FormProvider methods={methods}>
-            <MovieFilter genres={genres} resetFilter={reset} />
+            <MovieFilter genres={genres} resetFilter={reset}  />
           </FormProvider>
         </Stack>
         <Stack sx={{ flexGrow: 1, gap: 3 }}>
@@ -166,7 +163,7 @@ function HomePage() {
           </Stack>
         </Stack>
       </Stack>
-    </Container>
+    </Grid>
   );
 }
 
