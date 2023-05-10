@@ -10,13 +10,12 @@ function MovieFilter({ genres, resetFilter }) {
       alignItems="center"
       justifyContent="space-around"
       flexDirection={{ xs: "row", sm: "column" }}
-    
     >
       <Typography variant="h6" sx={{ fontWeight: 600 }}>
         Genre
       </Typography>
 
-      <Box display={{xs: "flex", sm:"none"}}>
+      <Box display={{ xs: "flex", sm: "none" }}>
         <FSelect name="genreName" size="small" sx={{ width: 300 }}>
           {genres.map((item) => (
             <option key={item.id} value={item.name}>
