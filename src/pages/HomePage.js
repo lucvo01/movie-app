@@ -27,7 +27,7 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [favorite, setFavorite] = useState(false);
-  let [searchParams, setSearchParams] = useSearchParams();
+  let [searchParams] = useSearchParams();
 
   const defaultValues = { genreName: "", query: "" };
   const methods = useForm({ defaultValues });
@@ -40,7 +40,7 @@ function HomePage() {
       methods.setValue("query", searchParams.get("query"));
       // console.log("searchParams", searchParams.get("query"));
     }
-  }, []);
+  }, [searchParams, methods]);
 
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(filteredMovies.length / 12);
