@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import apiService from "../app/apiService";
-import { Alert, Box, Button, Grid , Stack, Divider } from "@mui/material";
+import { Alert, Box, Button, Grid, Stack, Divider } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
@@ -47,7 +47,9 @@ function HomePage() {
   // const totalPages = Math.ceil(filteredMovies.length / 12);
   const startIndex = (page - 1) * 20;
   const endIndex = startIndex + 20;
-  const genreId = filters.genreName ? genres.find(genre => genre.name === filters.genreName)?.id : null;
+  const genreId = filters.genreName
+    ? genres.find((genre) => genre.name === filters.genreName)?.id
+    : null;
 
   useEffect(() => {
     const fetch = async () => {
@@ -64,14 +66,17 @@ function HomePage() {
             `${searchURL}?api_key=${apiKey}&query=${q}`
           );
           setMovies(resSearch.data.results);
-          setTotalPages(resSearch.data.total_pages)
+          setTotalPages(resSearch.data.total_pages);
           console.log("Search", resSearch.data.results);
         } else {
           const resPopular = await apiService.get(
-            `${moviePopularURL}?api_key=${apiKey}${genreId ? `&with_genres=${genreId}` : ''}`);
+            `${moviePopularURL}?api_key=${apiKey}${
+              genreId ? `&with_genres=${genreId}` : ""
+            }`
+          );
 
           setMovies(resPopular.data.results);
-          setTotalPages(resPopular.data.total_pages)
+          setTotalPages(resPopular.data.total_pages);
           console.log("Popular", resPopular.data.results);
         }
         setError("");
@@ -90,15 +95,17 @@ function HomePage() {
         marginTop={3}
         direction={{ xs: "column", sm: "row" }}
         divider={<Divider orientation="vertical" flexItem />}
-        spacing={1}
+        spacing={2}
+        padding={5}
+        paddingTop={0}
       >
-        <Stack className="genre-list" >
+        <Box className="genre-list">
           <FormProvider methods={methods}>
-            <MovieFilter genres={genres} resetFilter={reset}  />
+            <MovieFilter genres={genres} resetFilter={reset} />
           </FormProvider>
-        </Stack>
-        <Stack sx={{ flexGrow: 1, gap: 3 }}>
-          <Stack
+        </Box>
+        <Box sx={{ flexGrow: 1, gap: 3 }}>
+          <Box
             sx={{
               alignItems: "center"
             }}
@@ -118,7 +125,7 @@ function HomePage() {
                 </Button>
               </FormProvider>
             </Box>
-          </Stack>
+          </Box>
           <Box sx={{ position: "relative", height: 1 }}>
             {loading ? (
               <LoadingScreen />
@@ -152,7 +159,7 @@ function HomePage() {
               </>
             )}
           </Box>
-          <Stack sx={{ alignItems: "center" }}>
+          <Box sx={{ alignItems: "center" }}>
             <Pagination
               count={totalPages}
               page={page}
@@ -160,8 +167,8 @@ function HomePage() {
                 setPage(value);
               }}
             />
-          </Stack>
-        </Stack>
+          </Box>
+        </Box>
       </Stack>
     </Grid>
   );
