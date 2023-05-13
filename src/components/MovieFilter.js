@@ -16,7 +16,7 @@ function MovieFilter({ genres, resetFilter }) {
       </Typography>
 
       <Box display={{ xs: "flex", sm: "none" }}>
-        <FSelect name="genreName" size="small" sx={{ width: 300 }}>
+        <FSelect name="genreName" size="small" sx={{}}>
           {genres.map((item) => (
             <option key={item.id} value={item.name}>
               {item.name}

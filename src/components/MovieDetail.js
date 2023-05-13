@@ -45,14 +45,18 @@ function MovieDetail({ movie }) {
         {/* <CardActionArea>  */}
         <CardMedia
           sx={{
-            height: 700,
-            width: 500,
+            width: "100%",
+
             position: "relative"
             // objectFit: "contain"
           }}
-          image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
           title={movie.title}
         >
+          <img
+            src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+            alt=""
+            width="100%"
+          />
           <Box
             onClick={handleClick}
             sx={{

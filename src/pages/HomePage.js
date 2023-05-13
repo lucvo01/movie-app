@@ -91,85 +91,87 @@ function HomePage() {
 
   return (
     <Grid container className="movie-list">
-      <Stack
-        marginTop={3}
-        direction={{ xs: "column", sm: "row" }}
-        divider={<Divider orientation="vertical" flexItem />}
-        spacing={2}
-        padding={5}
-        paddingTop={0}
-      >
-        <Box className="genre-list">
-          <FormProvider methods={methods}>
-            <MovieFilter genres={genres} resetFilter={reset} />
-          </FormProvider>
-        </Box>
-        <Box sx={{ flexGrow: 1, gap: 3 }}>
-          <Box
-            sx={{
-              alignItems: "center"
-            }}
-          >
-            <Box>
-              <FormProvider methods={methods}>
-                <MovieSearch />
-                <Button
-                  onClick={() => setFavorite(!favorite)}
-                  sx={{
-                    marginLeft: 2,
-                    color: theme.palette.primary.lighter,
-                    backgroundColor: theme.palette.primary.dark
-                  }}
-                >
-                  <b>Favorite</b>
-                </Button>
-              </FormProvider>
+      <Grid xs={12}>
+        <Stack
+          marginTop={3}
+          direction={{ xs: "column", sm: "row" }}
+          divider={<Divider orientation="vertical" flexItem />}
+          spacing={2}
+          padding={5}
+          paddingTop={0}
+        >
+          <Box className="genre-list">
+            <FormProvider methods={methods}>
+              <MovieFilter genres={genres} resetFilter={reset} />
+            </FormProvider>
+          </Box>
+          <Box sx={{ flexGrow: 1, gap: 3 }}>
+            <Box
+              sx={{
+                alignItems: "center"
+              }}
+            >
+              <Box>
+                <FormProvider methods={methods}>
+                  <MovieSearch />
+                  <Button
+                    onClick={() => setFavorite(!favorite)}
+                    sx={{
+                      marginLeft: 2,
+                      color: theme.palette.primary.lighter,
+                      backgroundColor: theme.palette.primary.dark
+                    }}
+                  >
+                    <b>Favorite</b>
+                  </Button>
+                </FormProvider>
+              </Box>
+            </Box>
+            <Box sx={{ position: "relative", height: 1 }}>
+              {loading ? (
+                <LoadingScreen />
+              ) : (
+                <>
+                  {error ? (
+                    <Alert severity="error">{error}</Alert>
+                  ) : (
+                    <>
+                      {favorite ? (
+                        <>
+                          <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                            Favorite Movies
+                          </Typography>
+                          <MovieList
+                            movies={filteredMovies.slice(startIndex, endIndex)}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                            Popular Movies
+                          </Typography>
+                          <MovieList
+                            movies={filteredMovies.slice(startIndex, endIndex)}
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </Box>
+            <Box sx={{ alignItems: "center" }}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(event, value) => {
+                  setPage(value);
+                }}
+              />
             </Box>
           </Box>
-          <Box sx={{ position: "relative", height: 1 }}>
-            {loading ? (
-              <LoadingScreen />
-            ) : (
-              <>
-                {error ? (
-                  <Alert severity="error">{error}</Alert>
-                ) : (
-                  <>
-                    {favorite ? (
-                      <>
-                        <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                          Favorite Movies
-                        </Typography>
-                        <MovieList
-                          movies={filteredMovies.slice(startIndex, endIndex)}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                          Popular Movies
-                        </Typography>
-                        <MovieList
-                          movies={filteredMovies.slice(startIndex, endIndex)}
-                        />
-                      </>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </Box>
-          <Box sx={{ alignItems: "center" }}>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={(event, value) => {
-                setPage(value);
-              }}
-            />
-          </Box>
-        </Box>
-      </Stack>
+        </Stack>
+      </Grid>
     </Grid>
   );
 }
