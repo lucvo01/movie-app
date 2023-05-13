@@ -45,10 +45,7 @@ function MovieDetail({ movie }) {
         {/* <CardActionArea>  */}
         <CardMedia
           sx={{
-            width: "100%",
-
             position: "relative"
-            // objectFit: "contain"
           }}
           title={movie.title}
         >

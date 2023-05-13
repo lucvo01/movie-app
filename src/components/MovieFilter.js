@@ -11,12 +11,11 @@ function MovieFilter({ genres, resetFilter }) {
       justifyContent="space-around"
       flexDirection={{ xs: "row", sm: "column" }}
     >
-      <Typography variant="h6" sx={{ fontWeight: 600 }}>
-        Genre
-      </Typography>
-
       <Box display={{ xs: "flex", sm: "none" }}>
-        <FSelect name="genreName" size="small" sx={{}}>
+        <FSelect name="genreName" size="small">
+          <option disabled value="">
+            <em>--Select Genre--</em>
+          </option>
           {genres.map((item) => (
             <option key={item.id} value={item.name}>
               {item.name}
@@ -25,7 +24,14 @@ function MovieFilter({ genres, resetFilter }) {
         </FSelect>
       </Box>
 
-      <Box spacing={1} display={{ xs: "none", sm: "flex" }}>
+      <Box
+        spacing={1}
+        display={{ xs: "none", sm: "flex" }}
+        flexDirection="column"
+      >
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          Genre
+        </Typography>
         <FRadioGroup
           name="genreName"
           options={genres.map((item) => item.name)}
@@ -34,7 +40,7 @@ function MovieFilter({ genres, resetFilter }) {
       </Box>
       <Box>
         <Button
-          size="large"
+          size="medium"
           type="submit"
           color="inherit"
           variant="outlined"

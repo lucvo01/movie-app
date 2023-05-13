@@ -100,7 +100,7 @@ function HomePage() {
           padding={5}
           paddingTop={0}
         >
-          <Box className="genre-list">
+          <Box>
             <FormProvider methods={methods}>
               <MovieFilter genres={genres} resetFilter={reset} />
             </FormProvider>
@@ -108,26 +108,36 @@ function HomePage() {
           <Box sx={{ flexGrow: 1, gap: 3 }}>
             <Box
               sx={{
-                alignItems: "center"
+                display: "flex",
+                justifyContent: "center",
+                gap: "5px"
+              }}
+              flexDirection={{
+                xs: "column",
+                sm: "column",
+                md: "row",
+                lg: "row"
               }}
             >
-              <Box>
-                <FormProvider methods={methods}>
-                  <MovieSearch />
-                  <Button
-                    onClick={() => setFavorite(!favorite)}
-                    sx={{
-                      marginLeft: 2,
-                      color: theme.palette.primary.lighter,
-                      backgroundColor: theme.palette.primary.dark
-                    }}
-                  >
-                    <b>Favorite</b>
-                  </Button>
-                </FormProvider>
-              </Box>
+              <FormProvider methods={methods}>
+                <MovieSearch />
+              </FormProvider>
+              <Button
+                onClick={() => setFavorite(!favorite)}
+                sx={{
+                  color: theme.palette.primary.lighter,
+                  backgroundColor: theme.palette.primary.dark
+                }}
+              >
+                <b>Favorite</b>
+              </Button>
             </Box>
-            <Box sx={{ position: "relative", height: 1 }}>
+            <Box
+              sx={{
+                position: "relative",
+                height: 1
+              }}
+            >
               {loading ? (
                 <LoadingScreen />
               ) : (
@@ -138,7 +148,10 @@ function HomePage() {
                     <>
                       {favorite ? (
                         <>
-                          <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                          <Typography
+                            variant="h4"
+                            sx={{ fontWeight: 600, fontSize: "1.5em" }}
+                          >
                             Favorite Movies
                           </Typography>
                           <MovieList
@@ -147,7 +160,10 @@ function HomePage() {
                         </>
                       ) : (
                         <>
-                          <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                          <Typography
+                            variant="h4"
+                            sx={{ fontWeight: 600, fontSize: "1.5em" }}
+                          >
                             Popular Movies
                           </Typography>
                           <MovieList
@@ -159,15 +175,21 @@ function HomePage() {
                   )}
                 </>
               )}
-            </Box>
-            <Box sx={{ alignItems: "center" }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={(event, value) => {
-                  setPage(value);
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  paddingTop: "50px"
                 }}
-              />
+              >
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={(event, value) => {
+                    setPage(value);
+                  }}
+                />
+              </Box>
             </Box>
           </Box>
         </Stack>
@@ -177,36 +199,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-// function applyFilter(movies, filters, genres, favorite) {
-//   const { genreName, query } = filters;
-//   let filteredMovies = movies;
-//   let q = "";
-//   if (genreName) {
-//     const genreId = genres.find((genre) => genre.name === genreName).id;
-//     filteredMovies = filteredMovies.filter(
-//       (movie) => movie && movie.genre_ids && movie.genre_ids.includes(genreId)
-//     );
-//   }
-
-//   if (query) {
-//     q = query;
-//   }
-
-//   if (favorite) {
-//     const favoriteList = window.localStorage.getItem("favorite");
-//     filteredMovies = movies.filter(
-//       (movie) => favoriteList && favoriteList.includes(movie.id)
-//     );
-//     if (genreName) {
-//       const genreId = genres.find(
-//         (genre) => genre.name === filters.genreName
-//       ).id;
-//       filteredMovies = filteredMovies.filter(
-//         (movie) => movie && movie.genre_ids && movie.genre_ids.includes(genreId)
-//       );
-//     }
-//   }
-
-//   return { filteredMovies, q };
-// }
