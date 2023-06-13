@@ -45,11 +45,31 @@ function HomePage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   // const totalPages = Math.ceil(filteredMovies.length / 12);
-  const startIndex = (page - 1) * 20;
-  const endIndex = startIndex + 20;
+  // const startIndex = (page - 1) * 20;
+  // const endIndex = startIndex + 20;
   const genreId = filters.genreName
     ? genres.find((genre) => genre.name === filters.genreName)?.id
     : null;
+
+  useEffect(() => {
+if(favorite){const fetchFavoriteMovies = async (favoriteList) => {
+      try {
+        const favoriteList = window.localStorage.getItem("favorite");
+        console.log("favoriteList", favoriteList);
+        
+        const response = favoriteList.map(async(id)  =>
+          await apiService.get(`movie/${id}?api_key=${apiKey}`)
+        );
+        const favoriteMovies = await Promise.all(response);
+        console.log("fav", response);
+        // Process the favorite movies data here
+      } catch (error) {
+        console.error("Error fetching favorite movies:", error);
+      }
+    };
+    fetchFavoriteMovies();}
+    
+  });
 
   useEffect(() => {
     const fetch = async () => {
@@ -105,6 +125,7 @@ function HomePage() {
               <MovieFilter genres={genres} resetFilter={reset} />
             </FormProvider>
           </Box>
+
           <Box sx={{ flexGrow: 1, gap: 3 }}>
             <Box
               sx={{
@@ -119,9 +140,6 @@ function HomePage() {
                 lg: "row"
               }}
             >
-              <FormProvider methods={methods}>
-                <MovieSearch />
-              </FormProvider>
               <Button
                 onClick={() => setFavorite(!favorite)}
                 sx={{
@@ -154,40 +172,55 @@ function HomePage() {
                           >
                             Favorite Movies
                           </Typography>
-                          <MovieList
-                            movies={filteredMovies.slice(startIndex, endIndex)}
-                          />
+                          <MovieList movies={filteredMovies} />
                         </>
                       ) : (
                         <>
-                          <Typography
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              gap: "5px"
+                            }}
+                            flexDirection={{
+                              xs: "column",
+                              sm: "column",
+                              md: "row",
+                              lg: "row"
+                            }}
+                          >
+                            <FormProvider methods={methods}>
+                              <MovieSearch />
+                            </FormProvider>
+                          </Box>
+                          {/* <Typography
                             variant="h4"
                             sx={{ fontWeight: 600, fontSize: "1.5em" }}
                           >
                             Popular Movies
-                          </Typography>
+                          </Typography> */}
                           <MovieList movies={filteredMovies} />
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              paddingTop: "50px"
+                            }}
+                          >
+                            <Pagination
+                              count={totalPages}
+                              page={page}
+                              onChange={(event, value) => {
+                                setPage(value);
+                              }}
+                            />
+                          </Box>
                         </>
                       )}
                     </>
                   )}
                 </>
               )}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  paddingTop: "50px"
-                }}
-              >
-                <Pagination
-                  count={totalPages}
-                  page={page}
-                  onChange={(event, value) => {
-                    setPage(value);
-                  }}
-                />
-              </Box>
             </Box>
           </Box>
         </Stack>
