@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import apiService from "../app/apiService";
-import { Alert, Box, Button, Grid, Stack, Divider } from "@mui/material";
+import { Alert, Box, Button, Grid, Stack } from "@mui/material";
 import { FormProvider } from "../components/form";
 import MovieList from "../components/MovieList";
 import LoadingScreen from "../components/LoadingScreen";
@@ -9,13 +9,11 @@ import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import MovieFilter from "../components/MovieFilter";
 import MovieSearch from "../components/MovieSearch";
-// import  '../App.css';
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import useFilter from "../hooks/useFilter";
 
 const apiKey = "096661a0ca80af081193ef63f856a4cf";
-// const movieListURL = "/list/28";
 const moviePopularURL = "/movie/popular";
 const genresURL = "/genre/movie/list";
 const searchURL = "/search/multi";
@@ -23,6 +21,7 @@ const searchURL = "/search/multi";
 function HomePage() {
   const theme = useTheme();
   const [movies, setMovies] = useState([]);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -38,7 +37,6 @@ function HomePage() {
   useEffect(() => {
     if (searchParams.get("query")) {
       methods.setValue("query", searchParams.get("query"));
-      // console.log("searchParams", searchParams.get("query"));
     }
   }, [searchParams, methods]);
 
@@ -52,24 +50,29 @@ function HomePage() {
     : null;
 
   useEffect(() => {
-if(favorite){const fetchFavoriteMovies = async (favoriteList) => {
-      try {
-        const favoriteList = window.localStorage.getItem("favorite");
-        console.log("favoriteList", favoriteList);
-        
-        const response = favoriteList.map(async(id)  =>
-          await apiService.get(`movie/${id}?api_key=${apiKey}`)
-        );
-        const favoriteMovies = await Promise.all(response);
-        console.log("fav", response);
-        // Process the favorite movies data here
-      } catch (error) {
-        console.error("Error fetching favorite movies:", error);
-      }
-    };
-    fetchFavoriteMovies();}
-    
-  });
+    if (favorite) {
+      const favoriteList = JSON.parse(window.localStorage.getItem("favorite"));
+      const fetchFavoriteMovies = async () => {
+        try {
+          let response = [];
+          console.log("favoriteList", favoriteList);
+          response = favoriteList.map((id) =>
+            apiService.get(`movie/${id}?api_key=${apiKey}`)
+          );
+          let favoriteMovies = await Promise.all(response);
+
+          favoriteMovies = favoriteMovies.map((el) => {
+            return el.data;
+          });
+          setFavoriteMovies(favoriteMovies);
+          console.log("favoriteMovies", favoriteMovies);
+        } catch (error) {
+          console.error("Error fetching favorite movies:", error);
+        }
+      };
+      fetchFavoriteMovies();
+    }
+  }, [favorite]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -115,16 +118,20 @@ if(favorite){const fetchFavoriteMovies = async (favoriteList) => {
         <Stack
           marginTop={3}
           direction={{ xs: "column", sm: "row" }}
-          divider={<Divider orientation="vertical" flexItem />}
+          // divider={<Divider orientation="vertical" flexItem />}
           spacing={2}
           padding={5}
           paddingTop={0}
         >
-          <Box>
-            <FormProvider methods={methods}>
-              <MovieFilter genres={genres} resetFilter={reset} />
-            </FormProvider>
-          </Box>
+          {favorite ? (
+            <></>
+          ) : (
+            <Box>
+              <FormProvider methods={methods}>
+                <MovieFilter genres={genres} resetFilter={reset} />
+              </FormProvider>
+            </Box>
+          )}
 
           <Box sx={{ flexGrow: 1, gap: 3 }}>
             <Box
@@ -140,6 +147,14 @@ if(favorite){const fetchFavoriteMovies = async (favoriteList) => {
                 lg: "row"
               }}
             >
+              {favorite ? (
+                <></>
+              ) : (
+                <FormProvider methods={methods}>
+                  <MovieSearch />
+                </FormProvider>
+              )}
+
               <Button
                 onClick={() => setFavorite(!favorite)}
                 sx={{
@@ -172,7 +187,7 @@ if(favorite){const fetchFavoriteMovies = async (favoriteList) => {
                           >
                             Favorite Movies
                           </Typography>
-                          <MovieList movies={filteredMovies} />
+                          <MovieList movies={favoriteMovies} />
                         </>
                       ) : (
                         <>
@@ -188,11 +203,7 @@ if(favorite){const fetchFavoriteMovies = async (favoriteList) => {
                               md: "row",
                               lg: "row"
                             }}
-                          >
-                            <FormProvider methods={methods}>
-                              <MovieSearch />
-                            </FormProvider>
-                          </Box>
+                          ></Box>
                           {/* <Typography
                             variant="h4"
                             sx={{ fontWeight: 600, fontSize: "1.5em" }}
