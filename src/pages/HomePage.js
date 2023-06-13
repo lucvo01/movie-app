@@ -59,18 +59,18 @@ function HomePage() {
           `${genresURL}?api_key=${apiKey}`
         );
         setGenres(resGenres.data.genres);
-        console.log("Genres", resGenres.data.genres);
+        // console.log("Genres", resGenres.data.genres);
 
         if (q) {
           const resSearch = await apiService.get(
-            `${searchURL}?api_key=${apiKey}&query=${q}`
+            `${searchURL}?api_key=${apiKey}&query=${q}&page=${page}`
           );
           setMovies(resSearch.data.results);
           setTotalPages(resSearch.data.total_pages);
-          console.log("Search", resSearch.data.results);
+          // console.log("Search", resSearch.data.results);
         } else {
           const resPopular = await apiService.get(
-            `${moviePopularURL}?api_key=${apiKey}${
+            `${moviePopularURL}?api_key=${apiKey}&page=${page}${
               genreId ? `&with_genres=${genreId}` : ""
             }`
           );
@@ -87,7 +87,7 @@ function HomePage() {
       setLoading(false);
     };
     fetch();
-  }, [q, filters.genreName, genreId]);
+  }, [q, filters.genreName, genreId, page]);
 
   return (
     <Grid container className="movie-list">
@@ -166,9 +166,7 @@ function HomePage() {
                           >
                             Popular Movies
                           </Typography>
-                          <MovieList
-                            movies={filteredMovies.slice(startIndex, endIndex)}
-                          />
+                          <MovieList movies={filteredMovies} />
                         </>
                       )}
                     </>
